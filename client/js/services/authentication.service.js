@@ -1,0 +1,58 @@
+angular.module('discuteApp.services').factory('AuthenticationService',function($http, $cookies, $rootScope, $cookies){
+	var service = {};
+	service.Login = login;
+	service.Logout = logout;
+    service.Register = register;
+	return service;
+
+	function login(email, password, callback){
+		$http.post('/login', {username: email, password: password})
+			.then(function(response){
+			    		 // login successful if there's a token in the response
+			    	if (response.data.token) {
+                        // store username and token in local storage to keep user logged in between page refreshes
+                        $rootScope.currentUser = { email: email, token: response.data.token, username: response.data.username, following: response.data.following };
+                        $cookies.putObject('currentUser',{ email: email, token: response.data.token, username: response.data.username, test: "Zever"});
+                        // add jwt token to auth header for all requests made by the $http service
+                        // $http.defaults.headers.common.Authorization = response.data.token;
+                        // execute callback with true to indicate successful login
+                        callback(true);
+                    } else {
+                        // execute callback with false to indicate failed login
+                        callback(false);
+                    }
+            })
+			.catch(function(err){
+                	console.log("Login error")
+                	console.log(err);
+            })
+    }
+    function register(user, callback){
+        $http.post('/register', user)
+        .then(function(){
+            callback(true);
+        })
+        .catch(function(data, status, headers, config){
+            console.log("Fail");
+            callback(false, data.data);
+        })
+    }
+  	function logout() {
+            // remove user from local storage and clear http auth header
+            // delete $localStorage.currentUser;
+            $cookies.remove('currentUser');
+            $rootScope.currentUser = null;
+            $http.defaults.headers.common.Authorization = '';
+    }
+}).factory('authInterceptor', function($cookies){
+    return {
+        request: function(config){
+            // if($localStorage.currentUser){
+            if( $cookies.getObject('currentUser')){
+                config.headers.Authorization =  $cookies.getObject('currentUser').token;//$localStorage.currentUser.token;
+            }
+            return config;
+        }
+
+    }
+});

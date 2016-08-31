@@ -1,0 +1,49 @@
+
+<div class="login-box">
+    <div class="login-header text-center">
+        <h1>Discute</h1>
+    </div>
+    <div class="line-box">
+        <div class="line-top"></div>
+    </div>
+    <div class="login-content">
+        <form name="registerForm" ng-submit="submitForm(registerForm, user)" novalidate>
+            <!-- USERNAME -->
+            <div class="form-group" ng-class="{ 'has-error' : registerForm.username.$invalid && !registerForm.username.$pristine }">
+                <input type="text" name="username" id="username" class="form-control" ng-model="user.username" ng-minlength="3" ng-maxlength="25" ng-model-options="{updateOn:'blur'}" placeholder="username">
+                <p ng-show="registerForm.username.$error.minlength" class="help-block">Username is too short.</p>
+                <p ng-show="registerForm.username.$error.maxlength" class="help-block">Username is too long.</p>
+                <p ng-show="usernameError" class="invalid-text">Username already exist</p>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="form-group" ng-class="{ 'has-error' : registerForm.email.$invalid && !registerForm.email.$pristine }">
+                <input type="email" name="email" id="email" class="form-control" ng-model="user.email" ng-model-options="{updateOn:'blur'}" placeholder="email">
+                <p ng-show="registerForm.email.$invalid && !registerForm.email.$pristine" class="help-block" >Enter a valid email.</p>
+                <p ng-show="emailError" class="invalid-text"> Email is already registered</p>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-group" ng-class="{ 'has-error' : registerForm.password.$invalid && !registerForm.password.$pristine }">
+                <input type="password" name="password" class="form-control" ng-model="user.password" required ng-model-options="{updateOn:'blur'}" placeholder="password">
+                <p ng-show="registerForm.password.$invalid && !registerForm.password.$pristine" class="help-block">Password is required.</p>
+            </div>
+
+            <!-- REPEAT PASSWORD -->
+            <div class="form-group" ng-class="{ 'has-error' : registerForm.password_verify.$invalid && !registerForm.password_verify.$pristine }">
+                <input type="password" name="password_verify" class="form-control" ng-model="user.password_verify" required password-validator="user.password == user.password_verify" ng-model-options="{updateOn:'blur'}" placeholder="repeat password">
+                <p ng-show="registerForm.password_verify.$invalid && !registerForm.password_verify.$pristine" class="help-block">Passwords don't match.</p>
+            </div>
+            <button type="submit" class="btn btn-login" >Sign up</button>
+        </form>
+    </div>
+    <div class="line-box">
+        <div class="line-bottom"></div>
+    </div>
+    <div class="sing-up-content">
+        <p>Already have an account? <a ui-sref="login">Login</a></p>
+    </div>
+
+</div>
+
+

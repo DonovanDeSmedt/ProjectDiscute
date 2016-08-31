@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html data-ng-app="discuteApp" ng-cloak>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/"/>
+    <title>Discute</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="css/ng-img-crop.css"/>
+    <link rel="stylesheet" type="text/css" href="css/cropper.min.css">
+
+</head>
+<body>
+
+    <nav class="navbar navbar-default" role="navigation" id="main-navbar" ng-controller="GlobalController" ng-show="currentUser">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" ui-sref="home">Discute</a>
+            </div>
+            <div class="collapse navbar-collapse pull-right">
+                <ul class="nav navbar-nav">
+                    <li id="home" ng-show="currentUser" ui-sref="home" class="navbar-icon">
+                        <!-- <img src="images/home.png" alt="home-age"> -->
+                    </li>
+                    <li id="world" ng-show="currentUser" ui-sref="world" class="navbar-icon">
+                        <!-- <img src="images/world.png" alt="world-page" > -->
+                    </li>
+                    <li id="new" ng-show="currentUser" ui-sref="add-discute" class="navbar-icon">
+                        <!-- <img src="images/new1.png" alt="add new discute" > -->
+                    </li>
+                    <li id="user" ng-show="currentUser" ui-sref="user({username: currentUser.username})" class="navbar-icon">
+                        <!-- <img src="images/user3.png" alt="profile" > -->
+                    </li>
+                    <li id="exit" href="#logout" ng-show="currentUser" ng-click="logout()" class="navbar-icon">
+                        <!-- <img src="images/exit.png" alt="logout" > -->
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-default navbar-fixed-bottom"  id="mobile-navbar" ng-controller="GlobalController" ng-show="currentUser">
+        <div class="container">
+                <ul class="nav navbar-nav">
+                    <li id="home" ng-show="currentUser" ui-sref="home" class="navbar-icon">
+                        <!-- <img src="images/home.png" alt="home-age"> -->
+                    </li>
+                    <li id="world" ng-show="currentUser" ui-sref="world" class="navbar-icon">
+                        <!-- <img src="images/world.png" alt="world-page" > -->
+                    </li>
+                    <li id="new" ng-show="currentUser" ui-sref="add-discute" class="navbar-icon">
+                        <!-- <img src="images/new1.png" alt="add new discute" > -->
+                    </li>
+                    <li id="user" ng-show="currentUser" ui-sref="user({username: currentUser.username})" class="navbar-icon">
+                        <!-- <img src="images/user3.png" alt="profile" > -->
+                    </li>
+                </ul>
+        </div>
+    </nav>
+
+
+
+    <div class="container">
+        <div class="row top-buffer" >
+            <div ui-view></div>
+        </div>
+    </div>
+
+    <div class="login-background" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 960px; width: 1440px; z-index: -999999; position: fixed;">
+        <img style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1440px; height: 960px; max-height: none; max-width: none; z-index: -999999; left: 0px; top: 0px;" src="images/ny-sf2.jpg">
+    </div>
+
+
+
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.js"></script>
+    <script type="text/javascript" src="js/lib/angular.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-3.0.0.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script src="https://use.fontawesome.com/1ebb0ba15c.js"></script>
+    <script type="text/javascript" src='/js/lib/bootstrap.min.js'></script>
+    <script type="text/javascript" src='/js/lib/autosize.min.js'></script>
+
+    
+
+    <!-- Controllers -->
+    <script type="text/javascript" src="js/controller/global.controller.js"></script>
+    <script type="text/javascript" src="js/controller/home.controller.js"></script>
+    <script type="text/javascript" src="js/controller/profile.controller.js"></script>
+    <script type="text/javascript" src="js/controller/create.controller.js"></script>
+
+    <!-- Services -->
+    <script type="text/javascript" src="js/services/index.service.js"></script>
+    <script type="text/javascript" src="js/services/general.service.js"></script>
+    <script type="text/javascript" src="js/services/module.service.js"></script>
+
+    <!-- Authentication -->
+    <script type="text/javascript" src="js/auth/index.js"></script>
+    <script type="text/javascript" src="js/auth/login.controller.js"></script>
+    <script type="text/javascript" src="js/auth/register.controller.js"></script>
+    <script type="text/javascript" src="js/services/authentication.service.js"></script>
+
+    <!-- Libraries -->
+    <script type="text/javascript" src="views/directives/passwordValidator.js"></script>
+    <script type="text/javascript" src="js/lib/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="js/lib/angular-resource.min.js"></script>
+    <script type="text/javascript" src="js/lib/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="js/lib/angular-touch.min.js"></script>
+    <script type="text/javascript" src="js/lib/ng-file-upload.js"></script>
+    <script type="text/javascript" src="js/lib/ng-file-upload-shim.js"></script>
+    <script type="text/javascript" src="js/lib/ng-img-crop.js"></script>
+    <script type="text/javascript" src="js/lib/cropper.min.js"></script>
+    <script type="text/javascript" src="js/lib/bootbox.min.js"></script>
+</body>
+</html>
