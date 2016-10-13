@@ -1,24 +1,24 @@
 angular.module('discuteApp',['ui.router','ngResource','ngTouch','ngFileUpload','ngCookies','ngImgCrop','discuteApp.directives','discuteApp.controllers','discuteApp.services']);
 
 angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlRouterProvider){
-  $httpProvider.interceptors.push('authInterceptor');
-  $httpProvider.defaults.withCredentials = true;
-  $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-  $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-  $httpProvider.interceptors.push('myCSRF');
-  $urlRouterProvider.otherwise("/home");
-  $stateProvider.state('home',{
-    cache: false,
-    url:'/home',
-    templateUrl:'views/home.html',
-    controller:'HomeController',
-    resolve: {
-     logincheck: checkLoggedIn,
-     background: function($rootScope){
-      $(".login-background").hide();
+    $httpProvider.interceptors.push('authInterceptor');
+    $httpProvider.defaults.withCredentials = true;
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $httpProvider.interceptors.push('myCSRF');
+    $urlRouterProvider.otherwise("/home");
+    $stateProvider.state('home',{
+      cache: false,
+      url:'/home',
+      templateUrl:'views/home.html',
+      controller:'HomeController',
+      resolve: {
+       logincheck: checkLoggedIn,
+       background: function($rootScope){
+      // $(".login-background").hide();
       $rootScope.currentTag = null;
-     },
-     data: function(DModule){
+    },
+    data: function(DModule){
       return DModule.getDiscutes().then(function(discutes){
         return discutes;
       });
@@ -32,14 +32,14 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
   resolve: {
    logincheck: checkLoggedIn,
    background: function($rootScope){
-      $rootScope.currentTag = null;
-     },
-   data: function(DModule){
+    $rootScope.currentTag = null;
+  },
+  data: function(DModule){
     return DModule.getGeneralDiscutes().then(function(discutes){
       return splitArray(discutes);
     });
   } 
-  }
+}
 }).state('search',{
   cache: false,
   url:'/search/:name',
@@ -52,7 +52,7 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
       return splitArray(discutes);
     });
   } 
-  }
+}
 }).state('profile',{
   cache: false,
   url:'/profile',
@@ -81,7 +81,7 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
       return discute;
     });
   }
- }
+}
 }).state('user',{
   cache: false,
   url:'/profile/:username',
@@ -118,9 +118,7 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
 }).constant('_', window._).run(function($state, $http, $cookies){
   $state.go('home');
   // $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
-  
-})
-.provider('myCSRF',[function(){
+}).provider('myCSRF',[function(){
   var headerName = 'X-CSRFToken';
   var cookieName = 'csrftoken';
   var allowedMethods = ['GET'];
@@ -177,18 +175,18 @@ var checkUser = function($q, $stateParams, $rootScope){
   return deferred.promise;
 }
 var splitArray = function(discutes){
-    var prevIndex = 0;
-    var nextIndex = 3;
-    var newArray = [];
-    for(var i=0; i< discutes.length/3; i++){
-      newArray.push(discutes.slice(prevIndex, nextIndex));
-      prevIndex = nextIndex;
-      nextIndex+=3;
-    }
-    var rest = discutes % 3;
-    if(rest){
-      newArray.push(discutes.slice(discutes.length-rest, discutes.length-1));
-    }
-    return newArray;
+  var prevIndex = 0;
+  var nextIndex = 3;
+  var newArray = [];
+  for(var i=0; i< discutes.length/3; i++){
+    newArray.push(discutes.slice(prevIndex, nextIndex));
+    prevIndex = nextIndex;
+    nextIndex+=3;
   }
+  var rest = discutes % 3;
+  if(rest){
+    newArray.push(discutes.slice(discutes.length-rest, discutes.length-1));
+  }
+  return newArray;
+}
 

@@ -23,8 +23,7 @@ angular.module('discuteApp.services').factory('AuthenticationService',function($
                     }
             })
 			.catch(function(err){
-                	console.log("Login error")
-                	console.log(err);
+                    callback(false);
             })
     }
     function register(user, callback){
@@ -38,8 +37,6 @@ angular.module('discuteApp.services').factory('AuthenticationService',function($
         })
     }
   	function logout() {
-            // remove user from local storage and clear http auth header
-            // delete $localStorage.currentUser;
             $cookies.remove('currentUser');
             $rootScope.currentUser = null;
             $http.defaults.headers.common.Authorization = '';
@@ -47,9 +44,8 @@ angular.module('discuteApp.services').factory('AuthenticationService',function($
 }).factory('authInterceptor', function($cookies){
     return {
         request: function(config){
-            // if($localStorage.currentUser){
             if( $cookies.getObject('currentUser')){
-                config.headers.Authorization =  $cookies.getObject('currentUser').token;//$localStorage.currentUser.token;
+                config.headers.Authorization =  $cookies.getObject('currentUser').token;
             }
             return config;
         }

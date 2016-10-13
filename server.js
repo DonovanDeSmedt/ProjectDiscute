@@ -49,6 +49,7 @@ app.use('/js', express.static(__dirname + '/client/js'));
 app.use('/css', express.static(__dirname + '/client/css'));
 app.use('/views', express.static(__dirname + '/client/views'));
 app.use('/images', express.static(__dirname + '/client/images'));
+app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use('/fonts', express.static(__dirname + '/client/fonts'));
 
 app.set('json spaces', 2);
@@ -88,8 +89,14 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   console.log("General error");
   console.log(err.message)
+  console.log(err.status)
+  res.send({status: err.status, error: err, message: err.message});
+  
   // res.render('error', {
   //   message: err.message,
   //   error: err
   // });
 });
+
+
+

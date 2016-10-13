@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var discuteSchema = new Schema({
+var DiscuteSchema = new Schema({
 	title: {type: String},
 	left: {
 		picture: {
@@ -28,4 +28,16 @@ var discuteSchema = new Schema({
 	tags: [String]
 }, {collection: 'discutes'});
 
-module.exports = mongoose.model('Discute', discuteSchema);
+DiscuteSchema.methods.vote= function(left, right, cb){
+	this.left.votes = left;
+	this.right.votes = right;
+	this.save(cb);
+}
+DiscuteSchema.methods.comment= function(left, right, cb){
+	this.left.comments = left;
+	this.right.comments = right;
+	this.save(cb);
+}
+
+
+module.exports = mongoose.model('Discute', DiscuteSchema);

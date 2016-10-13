@@ -1,4 +1,4 @@
-angular.module('discuteApp').controller('ProfileController', function($scope,$rootScope, $state,$stateParams,$cookies, $http, AuthenticationService, Discute,DModule, Upload){
+angular.module('discuteApp').controller('ProfileController', function($scope,$rootScope, $state,$stateParams,$cookies,$window, $http, AuthenticationService, Discute,DModule, Upload){
 	$scope.getUser = function(){
 		$http.get('/user/'+$stateParams.username).then(function(user){
 			$scope.user = {};
@@ -51,8 +51,8 @@ angular.module('discuteApp').controller('ProfileController', function($scope,$ro
 	}
 	$rootScope.setCurrentDiscute = function(index, parentIndex, array){
 		$rootScope.currentDiscuteArray = array;
-		$scope.parentIndex = parentIndex;
-		$scope.index = index;
+		$rootScope.parentIndex = parentIndex;
+		$rootScope.index = index;
 		$rootScope.currentDiscute = array[parentIndex][index];//$scope.user.discuteArray[parentIndex][index];
 	}
 	$scope.follow = function(user){
@@ -93,36 +93,37 @@ angular.module('discuteApp').controller('ProfileController', function($scope,$ro
 		DModule.delete_comment(side, comment, indexComment, discute, $rootScope.currentUser.username);
 	}
 	$rootScope.goLeft = function(){
-		if($scope.index > 0){
-			$scope.index--;
+		if($rootScope.index > 0){
+			$rootScope.index--;
 		}
 		else{
-			if($scope.parentIndex > 0){
-				$scope.parentIndex--;
-				$scope.index = $rootScope.currentDiscuteArray[$scope.parentIndex].length - 1;
+			if($rootScope.parentIndex > 0){
+				$rootScope.parentIndex--;
+				$rootScope.index = $rootScope.currentDiscuteArray[$rootScope.parentIndex].length - 1;
 			}
 		}
-		$rootScope.currentDiscute = $rootScope.currentDiscuteArray[$scope.parentIndex][$scope.index];
+		$rootScope.currentDiscute = $rootScope.currentDiscuteArray[$rootScope.parentIndex][$rootScope.index];
 	}
 	$rootScope.goRight = function(){
-		if($scope.index < $rootScope.currentDiscuteArray[$scope.parentIndex].length - 1){
-			$scope.index++;
+		if($rootScope.index < $rootScope.currentDiscuteArray[$rootScope.parentIndex].length - 1){
+			$rootScope.index++;
 		}
 		else{
-			if($scope.parentIndex < $rootScope.currentDiscuteArray.length - 1){
-				$scope.parentIndex++;
-				$scope.index = 0;
+			if($rootScope.parentIndex < $rootScope.currentDiscuteArray.length - 1){
+				$rootScope.parentIndex++;
+				$rootScope.index = 0;
 			}
 		}
-		$rootScope.currentDiscute = $rootScope.currentDiscuteArray[$scope.parentIndex][$scope.index];
+		$rootScope.currentDiscute = $rootScope.currentDiscuteArray[$rootScope.parentIndex][$rootScope.index];
 	}
 	$scope.deleteDiscute = function(){
 		bootbox.confirm("Are you sure?", function(result) {
 			if(result){
-				$rootScope.currentDiscuteArray[$scope.parentIndex][$scope.index] = null;
+				$rootScope.currentDiscuteArray[$rootScope.parentIndex][$rootScope.index] = null;
 				DModule.deleteDiscute($rootScope.currentDiscute);
 				$('#discuteModal').modal('hide');
 				$rootScope.$apply();
+				 $window.location.reload();
 			}
 		}); 
 	}

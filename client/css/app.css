@@ -243,6 +243,14 @@ input{
 	border-radius: 0;
 	background-color: transparent;
 }
+.btn-upload-sm{
+	border: 1px solid #999;
+	color: #2B3E50;
+	font-size: 13px;
+	font-weight: 700;
+	border-radius: 0;
+	background-color: transparent;
+}
 .btn-exit{
 	border: 1px solid #a94442;
 	color: #a94442
@@ -762,6 +770,15 @@ opacity:1;
 	position: absolute;
 	z-index: 2;
 	right: 25%;
+}
+.imgSearch{
+	border: none;
+    border-bottom: 1px solid gainsboro;
+    text-align: center;
+	width: 75%;
+}
+.imgSearchBar{
+	padding-bottom: 1em;
 }
 @media(min-width: 769px){
 	#mobile-navbar{

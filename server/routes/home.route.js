@@ -18,7 +18,31 @@ var Discute = require(appDir+'/server/models/discute.js');
 
 
 var gfs = Grid(conn.db);
-router.post('/new', function(req, res){
+
+
+router.param('discute_id', function(req, res, next, id){
+	var query = Discute.findById(id);
+	query.exec(function (err, discute) {
+		if (err) { return next(err); }
+		if (!discute) { return next(new Error("Can't find discute")); }
+
+		req.discute = discute;
+		return next();
+	});
+})
+/**
+*@api {post} /api/new/ Post new discute object
+*@apiName PostDiscute
+*@apiGroup Discute
+*@apiParam {String} filenameLeft Name discute left.
+*@apiParam {String} filenameRight Name discute right.
+*@apiParam {String} fileExtensionLeft Extension image left.
+*@apiParam {String} fileExtensionRight Extension image right.
+*@apiParam {String} pathImageLeft Path image left.
+*@apiParam {String} pathImageRight Path image right.
+*@apiError NoAccessRight User is not authenticated
+*/
+router.post('/new', function(req, res, next){
 	var fileNameLeft = req.body.author +  new Date().getTime();
 	var fileNameRight = req.body.author +  (new Date().getTime() + 1);
 	var fileExtensionLeft = req.files[0].mimetype;
@@ -81,20 +105,31 @@ router.post('/new', function(req, res){
 		if(err){
 			console.log("Error while saving discute object");
 			console.log(err.message);
+			next(err);
 		}
 		result++;
 		if(result === 3){
-			res.send("Succes hhh");
+			res.send("Succes");
 		}
 	})
 });
-
-router.get('/:username/:index', function(req, res){
+/**
+*@api {get} /api/:username/:index Get discutes of subscribtions
+*@apiName GetDiscute
+*@apiGroup Discute
+*@apiParam {String} Username Name of user
+*@apiParam {Number} Pagenumber Pagenumber
+*@apiDescription Get latest discutes of your subscribtions per page.
+*@apiSuccess {Object[]} Discutes List of discute objects.
+*@apiError NoAccessRight User is not authenticated
+*@apiError UserNotFound The <code>id</code> of the User was not found.
+*/
+router.get('/:username/:index', function(req, res, next){
 	var amountToSkip = req.params.index * 12;
 	User.findOne({username: req.params.username}, function(err, user){
 		if(err){
 			console.log("Error while fetching data");
-			throw err;
+			next(err);
 		}
 		if(user){
 			Discute.find({author: {$in: user.following}}).sort({date: -1}).skip(amountToSkip).limit(12).exec(function(err, data){
@@ -109,12 +144,16 @@ router.get('/:username/:index', function(req, res){
 		}
 	})	
 });
-router.delete('/:id', function(req, res){
-	
-	Discute.findById(req.params.id, function(err, discute){
-		if(err){
-			throw err;
-		}
+/**
+*@api {delete} /api/:id Delete discute
+*@apiName DeleteDiscute
+*@apiGroup Discute
+*@apiParam {Number} Id Id of discute
+*@apiError NoAccessRight User is not authenticated
+*@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
+*/
+router.delete('/:discute_id', function(req, res, next){	
+		var discute = req.discute;
 		var picLeft = discute.left.picture.fileName;
 		var picRight = discute.right.picture.fileName;
 
@@ -136,36 +175,56 @@ router.delete('/:id', function(req, res){
 		});
 		discute.remove(function(err){
 			if(err){
-				throw err;
+				next(err);
 			}
 			res.send(200);
 		});
-	})
-})
-router.get('/discute/findById/:id', function(req, res){
-	Discute.find({_id: req.params.id}, function(err, data){
-		if(err){
-			console.log("Error while fetching data");
-			throw err;
-		}
-		if(data){
-			res.json({discute: prepareDataToBeSend(data)});
-		}
-	});
 });
-router.get('/:index', function(req, res){
+/**
+*@api {get} /api/discute/findById/:id Get discute by id
+*@apiName FindDiscuteById
+*@apiGroup Discute
+*@apiParam {Number} Id Id of discute
+*@apiSuccess {Object} Discute discute object.
+*@apiError NoAccessRight User is not authenticated
+*@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
+*/
+router.get('/discute/findById/:discute_id', function(req, res){
+	res.json({discute: prepareDataToBeSend([req.discute])});
+});
+/**
+*@api {get} /api/:index Get trending discutes
+*@apiName GetTrendingDiscutes
+*@apiGroup Discute
+*@apiDescription Get latest discutes per page.
+*@apiParam {Number} Pagenumber Pagenumber
+*@apiSuccess {Object[]} Discutes List of discute objects.
+*@apiError NoAccessRight User is not authenticated
+*@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
+*/
+router.get('/:index', function(req, res, next){
 	var amountToSkip = req.params.index * 21;
 	Discute.find().sort({date: -1}).skip(amountToSkip).limit(21).exec(function(err, data){
 		if(err){
 			console.log("Error while fetching data");
-			throw err;
+			next(err);
 		}
 		if(data){
 			res.json({discutes: prepareDataToBeSend(data)});
 		}
 	});
 });
-router.get('/orderBy/:sort/:index', function(req, res){
+/**
+*@api {get} /api/orderBy/:sort/:index Get treningd discutes ordered
+*@apiDescription Get ordered list of discutes per page  
+*@apiName GetOrderedTrendingDiscutes
+*@apiGroup Discute
+*@apiParam {Number} Pagenumber Pagenumber
+*@apiParam {String} Order Type order
+*@apiSuccess {Object[]} Discutes List of discute objects.
+*@apiError NoAccessRight User is not authenticated
+*/
+router.get('/orderBy/:sort/:index', function(req, res, next){
 	var amountToSkip = req.params.index * 21;
 	var date = new Date();
 	switch(req.params.sort.toLowerCase()){
@@ -229,7 +288,7 @@ router.get('/orderBy/:sort/:index', function(req, res){
 		], function(err, data){
 			if(err){
 				console.log("Error while fetching data from orderBy");
-				throw err;
+				next(err);
 			}
 			if(data){
 				res.json({discutes: prepareDataToBeSend(data)});
@@ -239,7 +298,18 @@ router.get('/orderBy/:sort/:index', function(req, res){
 			}
 		});
 });
-router.get('/searchAndOrder/:search/:sort/:index', function(req, res){
+/**
+*@api {get} /api/searchAndOrder/:search/:sort/:index Search and order
+*@apiDescription Get ordered list of discutes by search per page
+*@apiName GetDiscutesBySearchAndOrder
+*@apiGroup Discute
+*@apiParam {String} Searchterm Searchterm
+*@apiParam {String} Order Type order
+*@apiParam {Number} Pagenumber Pagenumber
+*@apiSuccess {Object[]} Discutes List of discute objects.
+*@apiError NoAccessRight User is not authenticated
+*/
+router.get('/searchAndOrder/:search/:sort/:index', function(req, res, next){
 	var date = new Date();
 	var amountToSkip = req.params.index * 21;
 	switch(req.params.sort.toLowerCase()){
@@ -317,7 +387,7 @@ router.get('/searchAndOrder/:search/:sort/:index', function(req, res){
 		], function(err, data){
 			if(err){
 				console.log("Error while fetching data from orderBy");
-				throw err;
+				next(err);
 			}
 			if(data){
 				res.json({discutes: prepareDataToBeSend(data)});
@@ -327,7 +397,17 @@ router.get('/searchAndOrder/:search/:sort/:index', function(req, res){
 			}
 		});
 });
-router.get('/search/:name/:index', function(req, res){
+/**
+*@api {get} /api/search/:name/:index Search
+*@apiDescription Get list of discutes by search
+*@apiName GetDiscutesBySearch
+*@apiGroup Discute
+*@apiParam {String} Searchterm Searchterm
+*@apiParam {Number} Pagenumber Pagenumber
+*@apiSuccess {Object[]} Discutes List of discute objects.
+*@apiError NoAccessRight User is not authenticated
+*/
+router.get('/search/:name/:index', function(req, res, next){
 	var amountToSkip = req.params.index * 21;
 	var name = req.params.name;
 	Discute.find(
@@ -341,7 +421,7 @@ router.get('/search/:name/:index', function(req, res){
 		}).sort({date: -1}).skip(amountToSkip).limit(21).exec(function(err, data){
 			if(err){
 				console.log("Error while fetching data from orderBy");
-				throw err;
+				next(err);
 			}
 			if(data){
 				res.json({discutes: prepareDataToBeSend(data)});
@@ -351,12 +431,22 @@ router.get('/search/:name/:index', function(req, res){
 			}
 		});
 	});
-router.get('/tag/:name/:index', function(req, res){
+/**
+*@api {get} /api/tag/:name/:index Search by tag
+*@apiDescription Get list of discutes by tag per page
+*@apiName GetDiscutesByTag
+*@apiGroup Discute
+*@apiParam {String} Tag Tag
+*@apiParam {Number} Pagenumber Pagenumber
+*@apiSuccess {Object[]} Discutes List of discute objects.
+*@apiError NoAccessRight User is not authenticated
+*/
+router.get('/tag/:name/:index', function(req, res, next){
 	var amountToSkip = req.params.index * 21;
 	Discute.find({ $text: { $search: req.params.name }}).sort({date: -1}).skip(amountToSkip).limit(21).exec(function(err, data){
 		if(err){
 			console.log("Error while fetching data from orderBy");
-			throw err;
+			next(err);
 		}
 		if(data){
 			res.json({discutes: prepareDataToBeSend(data)});
@@ -366,7 +456,18 @@ router.get('/tag/:name/:index', function(req, res){
 		}
 	});
 });
-router.get('/tagAndOrder/:tag/:sort/:index', function(req, res){
+/**
+*@api {get} /api/tag/:name/:index Search and order by tag
+*@apiDescription Get ordered list of discutes by tag per page
+*@apiName GetDiscutesByTagAndOrder
+*@apiGroup Discute
+*@apiParam {String} Tag Tag
+*@apiParam {String} Order Type order
+*@apiParam {Number} Pagenumber Pagenumber
+*@apiSuccess {Object[]} Discutes List of discute objects.
+*@apiError NoAccessRight User is not authenticated
+*/
+router.get('/tagAndOrder/:tag/:sort/:index', function(req, res, next){
 	var amountToSkip = req.params.index * 21;
 	var date = new Date();
 	switch(req.params.sort.toLowerCase()){
@@ -439,7 +540,7 @@ router.get('/tagAndOrder/:tag/:sort/:index', function(req, res){
 		], function(err, data){
 			if(err){
 				console.log("Error while fetching data from orderBy");
-				throw err;
+				next(err);
 			}
 			if(data){
 				res.json({discutes: prepareDataToBeSend(data)});
@@ -449,23 +550,37 @@ router.get('/tagAndOrder/:tag/:sort/:index', function(req, res){
 			}
 		});
 });
-router.put('/new/discute/:discute_id', function(req, res){
-	Discute.findById(req.params.discute_id, function(err, discute){
-		if(err){
-			console.log(err);
-		}
-		discute.left.votes = req.body.left.votes;
-		discute.right.votes = req.body.right.votes;
-		discute.left.comments = req.body.left.comments;
-		discute.right.comments = req.body.right.comments;
-		discute.save(function(err){
-			if(err){
-				console.log(err);
-			}
-			res.send(200);
-		})
+/**
+*@api {put} /api/vote/:discute_id Vote for discute
+*@apiName VoteDiscute
+*@apiGroup Discute
+*@apiParam {Object} Discute Object which contains left and right side amount of votes.
+*@apiParam {Number} Id Id of discute
+*@apiError NoAccessRight User is not authenticated
+*@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
+*/
+router.put('/vote/:discute_id', function(req, res, next){
+	req.discute.vote(req.body.left.votes, req.body.right.votes, function(err){
+		if(err){ next(err);}
+		res.send(200);
 	})
 });
+/**
+*@api {put} /api/new/discute/:discute_id Update discute
+*@apiName UpdateDiscute
+*@apiGroup Discute
+*@apiParam {Object} Discute Object which contains left and right side comment.
+*@apiParam {Number} Id Id of discute
+*@apiError NoAccessRight User is not authenticated
+*@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
+*/
+router.put('/comment/:discute_id', function(req, res, next){
+	req.discute.comment(req.body.left.comments, req.body.right.comments, function(err){
+		if(err){ next(err);}
+		res.send(200);
+	})
+});
+
 function prepareDataToBeSend(data){
 	var discute = [];
 	data.forEach(function(value, index){

@@ -75,7 +75,7 @@ angular.module('discuteApp.services').factory('Discute', function($resource){
      if(side === 'left'){
        discute.left.comments.push(newComment);
      }
-     _update_discute(discute);
+     _comment_discute(discute);
    }
 
    var vote = function(side, discute, username){
@@ -104,7 +104,7 @@ angular.module('discuteApp.services').factory('Discute', function($resource){
             discute.left.votes.splice(indexLeft, 1);	
           }
         }
-        _update_discute(discute);
+        _vote_discute(discute);
       }
 
       var delete_comment = function(side, comment, indexComment, discute, username){
@@ -115,12 +115,11 @@ angular.module('discuteApp.services').factory('Discute', function($resource){
           if(side === 'left'){
             discute.left.comments.splice(indexComment, 1);	
           }
-          _update_discute(discute);
+          _comment_discute(discute);
         }
       }
-
-      var _update_discute = function(discute){
-        $http.put('/api/new/discute/'+discute._id, discute).then(function(data){
+      var _vote_discute = function(discute){
+        $http.put('/api/vote/'+discute._id, discute).then(function(data){
 
         }).catch(function(err){
           console.log(err);
@@ -128,6 +127,16 @@ angular.module('discuteApp.services').factory('Discute', function($resource){
           $state.go('login');
         });
       }
+      var _comment_discute = function(discute){
+        $http.put('/api/comment/'+discute._id, discute).then(function(data){
+
+        }).catch(function(err){
+          console.log(err);
+          AuthenticationService.Logout();
+          $state.go('login');
+        });
+      }
+
       var search = function(name, array){
         var index =  array === null? 0 : Math.floor(_calculateLenghtDiscutes(array) / 21);
         if(name[0] === '#'){

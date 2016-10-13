@@ -6,7 +6,14 @@
 					<img ng-show="discute.picture.left" ng-src="{{leftPicture}}" class="topic image cropped" />
 					<img ng-src="images/x.png" class="delete" id="delete-left" ng-click="leftPicture = null" ng-show="discute.picture.left">
 					<img ng-show="!discute.picture.left" ng-src="images/no-image.png" ng-click="triggerUpload('left')"  class="topic image">
+					<div ng-show="!discute.picture.left">
+						<div class="imgSearchBar">
+							<input type="text" placeholder="search picture" ng-model="imgSearchLeft" class="imgSearch">
+						</div>
+						<div ng-click="customSearch(imgSearchLeft, 'left')" class="btn btn-upload-sm"> Search</div>
+					</div>
 					<h3 class="text-center title"><input type="text" class="text-center no-border" ng-model="discute.left_title" placeholder="add a title"></h3>
+					
 				</div>
 			</article>
 		</div>
@@ -34,6 +41,12 @@
 					<img ng-show="discute.picture.right" ng-src="{{rightPicture}}" class="topic image cropped" />
 					<img ng-src="images/x.png" class="delete" ng-click="rightPicture = null" id="delete-right" ng-show="discute.picture.right">
 					<img ng-show="!discute.picture.right" ng-src="images/no-image.png" ng-click="triggerUpload('right')"  class="topic image">
+					<div ng-show="!discute.picture.right">
+						<div class="imgSearchBar">
+							<input type="text" placeholder="search picture" ng-model="imgSearchRight" class="imgSearch">
+						</div>
+						<div ng-click="customSearch(imgSearchRight, 'right')" class="btn btn-upload-sm"> Search</div>
+					</div>
 					<h3 class="text-center title"><input type="text" class="text-center no-border" ng-model="discute.right_title" placeholder="add a title"></h3>
 				</div>
 			</article>
@@ -69,7 +82,7 @@
 </div>
 <!-- MOBILE VIEW -->
 <div class="hidden-lg hidden-md">
-		<div class="row">
+	<div class="row">
 		<div class="col-sm-12 col-xs-12 text-center">
 			<h3>Left side</h3>
 			<article class="discute-side" id="discute-side-left">
@@ -77,6 +90,12 @@
 					<img ng-show="discute.picture.left" ng-src="{{leftPicture}}" class="topic image cropped" />
 					<img ng-src="images/x.png" class="delete" id="delete-left" ng-click="discute.picture.left = null; leftPicture = null" ng-show="discute.picture.left">
 					<img ng-show="!discute.picture.left" ng-src="images/no-image.png" ng-click="triggerUpload('left')"  class="topic image">
+					<div ng-show="!discute.picture.left">
+						<div class="imgSearchBar">
+							<input type="text" placeholder="search picture" ng-model="imgSearchLeft" class="imgSearch">
+						</div>
+						<div ng-click="customSearch(imgSearchLeft, 'left')" class="btn btn-upload-sm"> Search</div>
+					</div>
 					<h3 class="text-center title"><input type="text" class="text-center no-border" ng-model="discute.left_title" placeholder="add a title"></h3>
 				</div>
 			</article>
@@ -94,6 +113,12 @@
 					<img ng-show="discute.picture.right" ng-src="{{rightPicture}}" class="topic image cropped" />
 					<img ng-src="images/x.png" class="delete" ng-click="discute.picture.right = null; rightPicture = null" id="delete-right" ng-show="discute.picture.right">
 					<img ng-show="!discute.picture.right" ng-src="images/no-image.png" ng-click="triggerUpload('right')"  class="topic image">
+					<div ng-show="!discute.picture.right">
+						<div class="imgSearchBar">
+							<input type="text" placeholder="search picture" ng-model="imgSearchRight" class="imgSearch">
+						</div>
+						<div ng-click="customSearch(imgSearchRight, 'right')" class="btn btn-upload-sm"> Search</div>
+					</div>
 					<h3 class="text-center title"><input type="text" class="text-center no-border" ng-model="discute.right_title" placeholder="add a title"></h3>
 				</div>
 			</article>

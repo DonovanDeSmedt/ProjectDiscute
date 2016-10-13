@@ -47,7 +47,9 @@ angular.module('discuteApp').controller('GlobalController', function($scope,$roo
             //console.log($scope.scrollPos);
         }
     });
-
+	$rootScope.initScrollPos = function(){
+		$scope.scrollPos = {};
+	}
 	$scope.scrollClear = function(path) {
 		$scope.scrollPos[path] = 0;
 	}

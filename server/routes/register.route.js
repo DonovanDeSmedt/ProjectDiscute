@@ -14,7 +14,17 @@ var User = require(appDir+'/server/models/user.js');
 router.get('/', function(req, res){
 	res.send('register dsf');
 })
-router.post('/', function(req, res){
+/**
+*@api {post} /register Register
+*@apiName Register
+*@apiGroup Authentication
+*@apiParam {String} Username Name of user
+*@apiParam {String} Email Email of user
+*@apiParam {String} Password Password of user
+*@apiError NoAccessRight User is not authenticated
+*@apiError UserAlreadyExists The user with <code>email</code> or <code>username</code> already exists.
+*/
+router.post('/', function(req, res, next){
 	var user = new User();
 		user.email = req.body.email;
 		user.username = req.body.username;
@@ -33,7 +43,7 @@ router.post('/', function(req, res){
 			else{
 				console.log("email of username bestaat al");
 				console.log(data.err);
-				return res.status(500).send(data.err.message);
+				next(new Error(data.err.message));
 			}
 		});
 });

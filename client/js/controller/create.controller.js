@@ -26,6 +26,19 @@ angular.module('discuteApp').controller('CreateController', function($scope,$roo
 	$("#delete-left").click(function(){
 		$scope.discute.picture.left = "";
 	});
+	$scope.customSearch = function(name, side){
+		$http.get('pictures/search/custom/'+name).then(function(img){
+			if(angular.isUndefined($scope.discute.picture)){
+				$scope.discute.picture = {};
+			}
+			switch(side){
+				case 'left': $scope.discute.picture.left = "uploads/"+img.data; break;
+				case 'right': $scope.discute.picture.right = "uploads/"+img.data; break;
+			}
+		}).catch(function(err){
+			console.log(err);
+		});
+	}
 	$scope.upload = function(leftPicture, rightPicture){
 		leftPicture === null ? $("#discute-side-left").addClass('upload-invalid') : $("#discute-side-left").removeClass('upload-invalid');
 		rightPicture === null ? $("#discute-side-right").addClass('upload-invalid') : $("#discute-side-right").removeClass('upload-invalid');
@@ -49,6 +62,7 @@ angular.module('discuteApp').controller('CreateController', function($scope,$roo
 				transformRequest: angular.indentity,
 				headers: { 'Content-Type': undefined }
 			}).then(function(response){
+				$rootScope.initScrollPos();
 				$state.go('home');
 			});
 		}
@@ -59,6 +73,13 @@ angular.module('discuteApp').controller('CreateController', function($scope,$roo
 		if(index >= 0){
 			word = word.replace(/ /g, '');
 		}
-  		return  word;
+		return  word;
 	}
+
+
+
+
+
+
+
 });

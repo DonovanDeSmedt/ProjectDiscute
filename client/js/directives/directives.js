@@ -9,7 +9,23 @@ angular.module('discuteApp.directives', [])
       });
     }
   };
-}).directive('ngEnter', function() {
+})
+.directive('discuteHeader', function () {
+  return {
+    restrict: 'AE',
+    replace: true,
+    templateUrl: 'views/directives/header.html'
+  };
+})
+.directive('loginBackground', function () {
+  return {
+    restrict: 'AE',
+    replace: true,
+    templateUrl: 'views/directives/loginBackground.html',
+    controller: 'GlobalController'
+  };
+})
+.directive('ngEnter', function() {
   return function(scope, element, attrs) {
     element.bind("keydown keypress", function(event) {
       if(event.which === 13) {

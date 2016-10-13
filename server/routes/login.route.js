@@ -51,28 +51,40 @@ router.get('/', function(req, res){
 // 	console.log("local");
 // 	res.json(req.user)
 // });
- router.post('/', function(req, res){
+/**
+*@api {post} /login Login
+*@apiName Login
+*@apiGroup Authentication
+*@apiParam {String} Username Name of user
+*@apiParam {String} Password Password
+*@apiSuccess {Object} Object containing username and JWT token
+*@apiError NoAccessRight User is not authenticated
+*/
+router.post('/', function(req, res, next){
+	var error = new Error("Authentication failed, user not found");
+	error.status = 404;
+
 	User.findOne({email: req.body.username}, function(err, user){
 		if(err){
 			console.log('Error with login'+err);
-			throw err;
+			next(err);
 		}
 		if(!user){
 			console.log("Not logged in");
-			res.send({succes:false, message: "Authentication failed, user not found"});
+			next(error);
 		}
 		else{
 			user.comparePassword(req.body.password, function(err, isMatch) {
-		      	if (isMatch && !err) {
+				if (isMatch && !err) {
 		      		// create the token
 		      		var obj = {username: user.username, email: user.email, password: user.password};
-					var token = jwt.sign(obj, config.secret, {expiresIn: 10080});
-					res.json({ success: true, token: 'JWT ' + token, username: user.username, following: user.following });
+		      		var token = jwt.sign(obj, config.secret, {expiresIn: 10080});
+		      		res.json({ success: true, token: 'JWT ' + token, username: user.username, following: user.following });
 		      	}
 		      	else {
-		      		res.send({succes:false, message: "Authentication failed, password did not match"});
+		      		next(error);
 		      	}
-		    });
+		      });
 		}
 	});
 });
