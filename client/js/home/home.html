@@ -1,0 +1,84 @@
+<div class="hidden-sm hidden-xs">
+	<div ng-repeat="discute in homeCtrl.discutes track by $index">
+		<div class="row discute-content">
+			<div class="col-md-4 col-md-offset-1">
+				<article class="discute-side">
+					<div class="main-content">
+						<img ng-src="pictures/{{discute.left.picture}}" ng-dblclick="homeCtrl.vote('left', discute)" alt="{{discute.left.title}}" class="topic image">
+						<h3 class="text-center title">{{discute.left.title}}</h3>
+						<div class="item-block icons">
+							<div class="votes" ng-click="homeCtrl.vote('left', discute)">
+								<p class="pull-left">{{discute.left.votes.length}}</p><div class="thumbs-up" ng-class="{'thumbs-up-active': discute.left.votes.indexOf(currentUser.username) > -1}"></div>
+							</div>
+							<div class="comments" ng-click="visible_left = !visible_left">
+								<p class="pull-right">{{discute.left.comments.length}} <img src="images/comment.png" class="comment-icon"></img></p>
+							</div>
+						</div>
+					</div>
+					<div class="user-content">
+						<div class="item-block" ng-show="visible_left">
+							<div ng-repeat="comment in discute.left.comments track by $index" class="comment">
+								<p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="homeCtrl.delete_comment('left',comment, $index, discute)">
+							</div>
+						</div>
+					</div>
+					<textarea name="comment" id="" class="comment-section" cols="40" rows="1" ng-model="discute.left.comment"
+					placeholder="write a comment..." ng-enter="homeCtrl.comment(discute.left.comment, 'left', discute)"></textarea>
+				</article>
+			</div>
+			<div class="col-md-2" >
+				<header class="text-center">
+					<img ng-src="pictures/profile/{{discute.author}}.profile" alt="" ui-sref="user({username: discute.author})" class="profile-picture img-circle">
+					<a ui-sref="user({username: discute.author})"  class="discuter">{{discute.author}}</a>
+				</header>
+				<article class="description text-center">
+					{{discute.description}}
+				</article>
+				<ul class="tags" ng-repeat="tag in discute.tags track by $index">
+					<li>
+						<a ui-sref="search({name: tag.slice(1)})" ng-click="setCurrentTag(tag)">{{tag}}</a>
+					</li>
+				</ul>
+				<div class="date">
+					{{discute.date}}
+				</div>
+			</div>
+			<div class="col-md-4">
+				<article class="discute-side">
+					<div class="main-content">
+						<img ng-src="pictures/{{discute.right.picture}}"  ng-dblclick="homeCtrl.vote('right', discute)" alt="{{discute.right.title}}" class="topic image">
+						<h3 class="text-center title">{{discute.right.title}}</h3>
+						<div class="item-block icons">
+							<div class="votes" ng-click="homeCtrl.vote('right', discute)">
+								<p class="pull-left">{{discute.right.votes.length}}</p> <div class="thumbs-up" ng-class="{'thumbs-up-active': discute.right.votes.indexOf(currentUser.username) > -1}"></div>
+								<!-- <img src="images/thumbs-up.png" class="vote-icon"></img> -->
+
+							</div>
+							<div class="comments" ng-click="visible_right = !visible_right">
+								<p class="pull-right">{{discute.right.comments.length}} <img src="images/comment.png" class="comment-icon"></img></p>
+							</div>
+						</div>
+					</div>
+					<div class="user-content">
+						<div class="item-block" ng-show="visible_right">
+							<div ng-repeat="comment in discute.right.comments track by $index" class="comment">
+								<p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="homeCtrl.delete_comment('right',comment, $index, discute)">
+							</div>
+						</div>
+					</div>
+					<textarea name="comment" id="" class="comment-section" cols="40" rows="1" ng-model="discute.right.comment"
+					placeholder="write a comment..." ng-enter="homeCtrl.comment(discute.right.comment, 'right', discute)"></textarea>
+				</article>
+			</div>
+		</div>
+	</div>
+	<div class="text-center">
+		<a ng-click="homeCtrl.loadMore('home', homeCtrl.discutes)" ng-show="homeCtrl.discutes.length === 12 && homeCtrl.discutes.length > 0">Load more</a>
+	</div>
+</div>
+
+
+
+<div class="hidden-lg hidden-md">
+	<ng-include src="'js/home/home.mobile.html'"></ng-include>  
+</div>

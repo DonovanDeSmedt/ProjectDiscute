@@ -1,5 +1,5 @@
-angular.module('discuteApp.services').factory('AuthenticationService',function($http, $cookies, $rootScope, $cookies){
-	var service = {};
+angular.module('discuteApp.service').factory('AuthenticationService',function($http, $cookies, $rootScope, $cookies){
+	let service = {};
 	service.Login = login;
 	service.Logout = logout;
     service.Register = register;

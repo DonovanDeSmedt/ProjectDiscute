@@ -1,4 +1,20 @@
-angular.module('discuteApp',['ui.router','ngResource','ngTouch','ngFileUpload','ngCookies','ngImgCrop','discuteApp.directives','discuteApp.controllers','discuteApp.services']);
+const requires = [
+  'ui.router',
+  'ngResource',
+  'ngTouch',
+  'ngFileUpload',
+  'ngCookies',
+  'ngImgCrop',
+  'discuteApp.home',
+  'discuteApp.profile',
+  'discuteApp.create',
+  'discuteApp.global',
+  'discuteApp.service',
+  'discuteApp.auth',
+  'discuteApp.directive'
+];
+
+angular.module('discuteApp', requires);
 
 angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlRouterProvider){
     $httpProvider.interceptors.push('authInterceptor');
@@ -10,25 +26,27 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
     $stateProvider.state('home',{
       cache: false,
       url:'/home',
-      templateUrl:'views/home.html',
+      templateUrl:'js/home/home.html',
       controller:'HomeController',
+      controllerAs: 'homeCtrl',
       resolve: {
-       logincheck: checkLoggedIn,
-       background: function($rootScope){
-      // $(".login-background").hide();
-      $rootScope.currentTag = null;
-    },
-    data: function(DModule){
-      return DModule.getDiscutes().then(function(discutes){
-        return discutes;
-      });
-    }
-  }
+        logincheck: checkLoggedIn,
+          background: function($rootScope){
+            // $(".login-background").hide();
+            $rootScope.currentTag = null;
+          },
+          data: function(DModule){
+            return DModule.getDiscutes().then(function(discutes){
+              return discutes;
+            });
+          }
+      }
 }).state('world',{
   cache: false,
   url:'/world',
-  templateUrl:'views/world.html',
+  templateUrl:'js/home/world.html',
   controller:'HomeController',
+  controllerAs: 'homeCtrl',
   resolve: {
    logincheck: checkLoggedIn,
    background: function($rootScope){
@@ -43,8 +61,9 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
 }).state('search',{
   cache: false,
   url:'/search/:name',
-  templateUrl:'views/search.html',
+  templateUrl:'js/home/search.html',
   controller:'HomeController',
+  controllerAs: 'homeCtrl',
   resolve: {
    logincheck: checkLoggedIn,
    data: function(DModule, $stateParams){
@@ -56,24 +75,27 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
 }).state('profile',{
   cache: false,
   url:'/profile',
-  templateUrl:'views/profile.html',
+  templateUrl:'js/profile/profile.html',
   controller:'ProfileController',
+  controllerAs: 'profileCtrl',
   resolve: {
    logincheck: checkLoggedIn
  }
 }).state('add-discute',{
   cache: false,
   url:'/add-discute',
-  templateUrl:'views/new.html',
+  templateUrl:'js/create/create.html',
   controller:'CreateController',
+  controllerAs: 'createCtrl',
   resolve: {
    logincheck: checkLoggedIn
  }
 }).state('mobile-discute-view',{
   cache: false,
   url:'/discute/:id',
-  templateUrl:'views/partials/discute_modal_mobile.html',
+  templateUrl:'js/partials/discute_modal_mobile.html',
   controller:'HomeController',
+  controllerAs: 'homeCtrl',
   resolve: {
    logincheck: checkLoggedIn,
    data: function(DModule,$stateParams){
@@ -85,16 +107,18 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
 }).state('user',{
   cache: false,
   url:'/profile/:username',
-  templateUrl:'views/profile.html',
+  templateUrl:'js/profile/profile.html',
   controller:'ProfileController',
+    controllerAs: 'profileCtrl',
   resolve: {
    logincheck: checkLoggedIn
  }
 }).state('edit',{
   cache: false,
   url:'/account/:username',
-  templateUrl:'views/edit_profile.html',
+  templateUrl:'js/profile/edit_profile.html',
   controller:'ProfileController',
+  controllerAs: 'profileCtrl',
   resolve: {
    logincheck: checkLoggedIn,
    usercheck: checkUser
@@ -102,12 +126,12 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
 }).state('login',{
   cache: false,
   url:'/login',
-  templateUrl:'views/auth/login.html',
+  templateUrl:'js/auth/login.html',
   controller:'LoginController'
 }).state('register',{
   cache: false,
   url:'/register',
-  templateUrl:'views/auth/register.html',
+  templateUrl:'js/auth/register.html',
   controller:'RegisterController'
 }).state('404',{
   cache: false,
@@ -119,9 +143,9 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
   $state.go('home');
   // $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
 }).provider('myCSRF',[function(){
-  var headerName = 'X-CSRFToken';
-  var cookieName = 'csrftoken';
-  var allowedMethods = ['GET'];
+  let headerName = 'X-CSRFToken';
+  let cookieName = 'csrftoken';
+  let allowedMethods = ['GET'];
 
   this.setHeaderName = function(n) {
     headerName = n;
@@ -145,9 +169,9 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
   }];
 }]);
 
-var checkLoggedIn = function($q, $timeout, $cookies,$http, $location, $rootScope, $state){
-  var deferred = $q.defer();
-  var obj = $cookies.getObject('currentUser');
+const checkLoggedIn = function($q, $timeout, $cookies,$http, $location, $rootScope, $state){
+  const deferred = $q.defer();
+  const obj = $cookies.getObject('currentUser');
   $rootScope.prevURL = $location.path();
   if($cookies.getObject('currentUser')!= null || !angular.isUndefined($rootScope.currentUser)){
     deferred.resolve();
@@ -162,8 +186,8 @@ var checkLoggedIn = function($q, $timeout, $cookies,$http, $location, $rootScope
 
   return deferred.promise;
 };
-var checkUser = function($q, $stateParams, $rootScope){
-  var deferred = $q.defer();
+const checkUser = function($q, $stateParams, $rootScope){
+  const deferred = $q.defer();
   console.log($stateParams.username);
   if(!angular.isUndefined($rootScope.currentUser) && $stateParams.username !== $rootScope.currentUser.username){
     deferred.reject();
@@ -174,16 +198,16 @@ var checkUser = function($q, $stateParams, $rootScope){
   }
   return deferred.promise;
 }
-var splitArray = function(discutes){
-  var prevIndex = 0;
-  var nextIndex = 3;
-  var newArray = [];
+const splitArray = function(discutes){
+  let prevIndex = 0;
+  let nextIndex = 3;
+  let newArray = [];
   for(var i=0; i< discutes.length/3; i++){
     newArray.push(discutes.slice(prevIndex, nextIndex));
     prevIndex = nextIndex;
     nextIndex+=3;
   }
-  var rest = discutes % 3;
+  let rest = discutes % 3;
   if(rest){
     newArray.push(discutes.slice(discutes.length-rest, discutes.length-1));
   }

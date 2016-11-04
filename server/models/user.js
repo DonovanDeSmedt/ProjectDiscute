@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypteo = require('crypto');
 
 
 var Schema = mongoose.Schema;
@@ -81,6 +82,10 @@ userSchema.methods.checkUnique = function(username, email, cb){
       });
     }   
   });
+}
+userSchema.methods.setPassword = function(password){
+  var salt = crypto.randomBytes(16).toString('hex');
+  var hash = crypto.pbkdf2Sync(password, salt, 1000, 64).toString();
 }
 userSchema.methods.encryptPassword = function(email, cb){
   var user = this ;

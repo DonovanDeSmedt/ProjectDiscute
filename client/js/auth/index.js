@@ -1,1 +1,1 @@
-angular.module('discuteApp.controllers',[]);
+angular.module('discuteApp.auth',[]);

@@ -1,0 +1,36 @@
+<div class="login-box">
+    <div class="login-header text-center">
+        <h1>Discute</h1>
+    </div>
+    <div class="line-box">
+        <div class="line-top"></div>
+    </div>
+    <div class="login-content">
+
+        <form name="loginForm" ng-submit="submitLoginForm(user)" novalidate>
+            <!-- EMAIL -->
+            <div class="form-group" ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }">
+
+                <input type="email" name="email" class="form-control" ng-model="user.email" ng-model-options="{updateOn:'blur'}" placeholder="Email"/>
+                <p ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">Enter a valid email.</p>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-group" ng-class="{ 'has-error' : loginForm.password.$invalid && !loginForm.password.$pristine }">
+                <input type="password" name="password" class="form-control" ng-model="user.password" required ng-model-options="{updateOn:'blur'}" placeholder="Password"/>
+                <p ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="help-block">Password is required.</p>
+            </div>
+            <p class="error-message">{{errorMessage}}</p>
+            <button type="submit" class="btn btn-login">Login</button>
+            
+        </form>
+    </div>
+    <div class="line-box">
+        <div class="line-bottom"></div>
+    </div>
+    <div class="sing-up-content">
+        <p>Don't have an account? <a ui-sref="register">Sign up</a></p>
+    </div>
+</div>
+
+

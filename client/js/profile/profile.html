@@ -1,0 +1,64 @@
+<div class="hidden-sm hidden-xs">
+<div class="profile-header row" data-ng-init="profileCtrl.getUser()">
+  <div class="col-md-offset-2 col-md-2">
+    <img ng-src="pictures/profile/{{profileCtrl.user.username}}.profile" class="img-circle img-responsive img" ng-class="currentUser.username === profileCtrl.user.username ? 'own-profile' : currentUser.following.indexOf(profileCtrl.user.username) < 0 ? 'follow': 'following'" ng-click="profileCtrl.follow(profileCtrl.user.username)">
+  </div>
+  <div class="col-md-offset-1 col-md-4">
+    <div class="personal-info">
+      <div class="profile-title">
+        <p class="profile-name">{{profileCtrl.user.username}} </p><span class="fa fa-edit edit-span" ng-show="profileCtrl.user.username === currentUser.username" ui-sref="edit({username: profileCtrl.user.username})"></span>
+      </div>
+      <div class="profile-follow" ng-show="profileCtrl.user.username != currentUser.username" >
+        <div ng-class="currentUser.following.indexOf(profileCtrl.user.username) < 0 ? 'btn-follow': 'btn-following'" ng-click="profileCtrl.follow(profileCtrl.user.username)">{{currentUser.following.indexOf(profileCtrl.user.username) < 0 ? 'follow': 'following'}}</div>
+      </div>
+    </div>
+    <div class="general-info">
+      <div class="pull-left">
+        <i class="fa fa-commenting-o fa-lg"></i><b> Discutes</b>: {{profileCtrl.user.discutes.length}}
+      </div>
+      <div class="pull-right">
+        <i class="fa fa-user fa-lg"></i><b> Discuters</b>: {{profileCtrl.user.followers.length}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="profile-content">
+  <div class="row discutes-profile" ng-repeat="discutes in profileCtrl.user.discuteArray track by $index">
+    <div ng-repeat="discute in discutes track by $index" class="discute-block" ng-click="setCurrentDiscute($index, $parent.$index, profileCtrl.user.discuteArray)">
+      <div class="discute-block-content"  data-toggle="modal" data-target="#discuteModal">
+        <div class="left-side pull-left">
+          <img ng-src="pictures/{{discute.left.picture}}" alt="" >
+        </div>
+        <div class="right-side pull-right">
+          <img ng-src="pictures/{{discute.right.picture}}" alt="">
+        </div>
+        <div class="info-block">
+          <header>
+            <p>{{discute.left.title}}</p>
+            <p>VS</p>
+            <p>{{discute.right.title}}</p>
+          </header>
+        </div>
+      </div>
+      <div class="discute-block-info">
+        <i class="fa fa-clock-o"></i>
+        <span>{{discute.date | date}}</span>
+      </div>    
+    </div>
+  </div>
+</div>
+<div class="modal" id="discuteModal" data-backdrop="true" data-keyboard="true" tabindex="-1" role="dialog" aria-labelledby="discuteModalLabel">
+  <ng-include src="'js/partials/discute_modal.html'"></ng-include>  
+</div>
+</div>
+<div class="hidden-lg hidden-md">
+  <ng-include src="'js/profile/profile.mobile.html'"></ng-include>  
+</div>
+
+
+
+
+
+
+
+

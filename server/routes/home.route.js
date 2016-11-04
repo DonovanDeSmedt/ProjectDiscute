@@ -100,6 +100,7 @@ router.post('/new', function(req, res, next){
 	discute.right.title = req.body.right_title;
 	discute.description = req.body.description;
 	discute.tags = req.body.tags.split(',');
+
 	// discute.profilePicture = profilePicture;
 	discute.save(function(err){
 		if(err){
@@ -111,7 +112,7 @@ router.post('/new', function(req, res, next){
 		if(result === 3){
 			res.send("Succes");
 		}
-	})
+	});
 });
 /**
 *@api {get} /api/:username/:index Get discutes of subscribtions
@@ -554,33 +555,63 @@ router.get('/tagAndOrder/:tag/:sort/:index', function(req, res, next){
 *@api {put} /api/vote/:discute_id Vote for discute
 *@apiName VoteDiscute
 *@apiGroup Discute
-*@apiParam {Object} Discute Object which contains left and right side amount of votes.
+*@apiParam {String} Username Name of the user who has voted
 *@apiParam {Number} Id Id of discute
+*@apiSuccess Data Votes and comments of both sides of the discute object
 *@apiError NoAccessRight User is not authenticated
 *@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
 */
 router.put('/vote/:discute_id', function(req, res, next){
-	req.discute.vote(req.body.left.votes, req.body.right.votes, function(err){
+	req.discute.vote(req.body.user, req.body.side, function(data, err){
 		if(err){ next(err);}
-		res.send(200);
+		res.json({
+			left: {votes: data.left.votes, comments: data.left.comments},
+		 	right: {votes: data.right.votes, comments: data.right.comments}
+		});
 	})
 });
 /**
-*@api {put} /api/new/discute/:discute_id Update discute
-*@apiName UpdateDiscute
+*@api {put} /api/commentdiscute/:discute_id Comment discute
+*@apiName Comment
 *@apiGroup Discute
-*@apiParam {Object} Discute Object which contains left and right side comment.
+*@apiParam {String} Username Name of the user who has commented
+*@apiParam {String} Side Side of discute object(left/right)
+*@apiParam {String} Comment Comment
 *@apiParam {Number} Id Id of discute
+*@apiSuccess Votes Comments of both sides
 *@apiError NoAccessRight User is not authenticated
 *@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
 */
 router.put('/comment/:discute_id', function(req, res, next){
-	req.discute.comment(req.body.left.comments, req.body.right.comments, function(err){
+	req.discute.comment(req.body.user, req.body.comment, req.body.side, function(data, err){
 		if(err){ next(err);}
-		res.send(200);
+		res.json({
+			left: {votes: data.left.votes, comments: data.left.comments},
+		 	right: {votes: data.right.votes, comments: data.right.comments}
+		});
 	})
 });
-
+/**
+*@api {put} /api/new/discute/:discute_id Update discute
+*@apiName Uncomment
+*@apiGroup Discute
+*@apiParam {String} Side Side of discute object(left/right)
+*@apiParam {Number} Id Id of discute
+*@apiParam {Number} Id Id of comment
+*@apiSuccess Votes Comments of both sides
+*@apiError NoAccessRight User is not authenticated
+*@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
+*/
+router.put('/uncomment/:discute_id', function(req, res, next){
+	req.discute.delete_comment(req.body.side, req.body.id, function(data, err){
+		if(err){ next(err);}
+		res.json({
+			left: {votes: data.left.votes, comments: data.left.comments},
+		 	right: {votes: data.right.votes, comments: data.right.comments}
+		});
+	});
+	
+});
 function prepareDataToBeSend(data){
 	var discute = [];
 	data.forEach(function(value, index){

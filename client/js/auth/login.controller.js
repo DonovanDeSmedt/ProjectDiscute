@@ -1,4 +1,4 @@
-angular.module('discuteApp.controllers').controller('LoginController', function($scope,$rootScope, $state, $http, AuthenticationService){
+angular.module('discuteApp.auth').controller('LoginController', function($scope,$rootScope, $state, $http, AuthenticationService){
 	$http.get('/login').then(function(data){
 	}).catch(function(err){
 		console.log(err);

@@ -1,0 +1,36 @@
+<div class="discute-row">
+	<div class="row discutes-profile" ng-repeat="discuteArray in homeCtrl.searchDiscutes || homeCtrl.discutes track by $index">
+		<div ng-repeat="discute in discuteArray track by $index" class="discute-block" ng-click="setCurrentDiscute($index, $parent.$index, homeCtrl.searchDiscutes || homeCtrl.discutes)">
+			<div class="discute-block-content"  data-toggle="modal" data-target="#discuteModal">
+				<div class="left-side pull-left">
+					<img ng-src="pictures/{{discute.left.picture}}" alt="" >
+				</div>
+				<div class="right-side pull-right">
+					<img ng-src="pictures/{{discute.right.picture}}" alt="">
+				</div>
+				<div class="info-block">
+					<header>
+						<p>{{discute.left.title}}</p>
+						<p>VS</p>
+						<p>{{discute.right.title}}</p>
+					</header>
+				</div>
+			</div>
+			<div class="discute-block-info">
+				<img ng-src="pictures/profile/{{discute.author}}.profile" alt="" ui-sref="user({username: discute.author})" class="profile-picture img-circle">
+				<div class="left-votes" ng-dblclick="homeCtrl.vote('left', discute)">
+					<i class="fa fa-thumbs-o-up fa-lg"></i>
+					<span>{{discute.left.votes.length}}</span>
+				</div>
+				<div class="right-votes" ng-dblclick="homeCtrl.vote('right', discute)">
+					<i class="fa fa-thumbs-o-up fa-lg"></i>
+					<span>{{discute.right.votes.length}}</span>
+				</div>
+			</div>    
+		</div>
+	</div>
+</div>
+<!-- <ng-include src="'views/home.html'"></ng-include>  -->
+<div class="modal" id="discuteModal" data-backdrop="true" data-keyboard="true" tabindex="-1" role="dialog" aria-labelledby="discuteModalLabel">
+	<ng-include src="'js/partials/discute_modal.html'"></ng-include>  
+</div>

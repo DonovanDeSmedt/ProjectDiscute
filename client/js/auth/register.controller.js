@@ -1,4 +1,4 @@
-angular.module('discuteApp.controllers').controller('RegisterController', function($scope, $state, $http, AuthenticationService){
+angular.module('discuteApp.auth').controller('RegisterController', function($scope, $state, $http, AuthenticationService){
 	
 	$scope.submitForm = function(form, user){	
 		if(!form.$valid){

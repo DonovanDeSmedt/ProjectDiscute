@@ -1,4 +1,4 @@
-angular.module('discuteApp.directives', [])
+angular.module('discuteApp.directive', [])
 .directive('passwordValidator', function () {
   return {
     require: 'ngModel',
@@ -14,14 +14,14 @@ angular.module('discuteApp.directives', [])
   return {
     restrict: 'AE',
     replace: true,
-    templateUrl: 'views/directives/header.html'
+    templateUrl: 'js/directives/header.html'
   };
 })
 .directive('loginBackground', function () {
   return {
     restrict: 'AE',
     replace: true,
-    templateUrl: 'views/directives/loginBackground.html',
+    templateUrl: 'js/directives/loginBackground.html',
     controller: 'GlobalController'
   };
 })

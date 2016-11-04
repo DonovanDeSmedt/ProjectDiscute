@@ -1,0 +1,9 @@
+{
+	"extends": ["angular"],
+	"rules": {
+		"angular/module-setter":0,
+		"angular/module-getter":0,
+		"angular/no-service-method":0
+	},
+	"parser": "bael-eslint"
+}

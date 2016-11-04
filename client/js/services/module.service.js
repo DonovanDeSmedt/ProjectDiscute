@@ -1,4 +1,4 @@
-angular.module('discuteApp.services').factory('Discute', function($resource){ 
+angular.module('discuteApp.service').factory('Discute', function($resource){ 
   return $resource('/discute/:id', { id: '@_id' }, {
     update: {
       method: 'PUT' 
@@ -7,54 +7,44 @@ angular.module('discuteApp.services').factory('Discute', function($resource){
 }).factory('DModule', function(Discute, $state, $http,$rootScope, AuthenticationService, $cookies){ 
   return (function(){
 
-    var discutes;
-    var _homeData = function(index){
+    let discutes;
+    const _homeData = function(index){
       return $rootScope.updateCurrentUser().then(function(){
-        return new Promise(function(resolve, reject){
-          $http.get('/api/'+$rootScope.currentUser.username+'/'+index).then(function(data){
-            discutes = data.data.discutes;
-            resolve(discutes);
-          }).catch(function(err){console.log(err)});
+        return $http.get('/api/'+$rootScope.currentUser.username+'/'+index).then(function(data){
+          return data.data.discutes;
+        }).catch(function(err){
+          console.log(err)
         });
-
       }).catch(function(err){
         console.log(err);
       });
     }
-    var _worldData = function(index){
+    const _worldData = function(index){
       return $rootScope.updateCurrentUser().then(function(){
-        return new Promise(function(resolve, reject){
-          $http.get('/api/'+index).then(function(data){
-            discutes = data.data.discutes;
-            resolve(discutes);
-          });
+        return $http.get('/api/'+index).then(function(data){
+          return data.data.discutes;
         });
-
       }).catch(function(err){
         console.log(err);
       });
     }
-    var getDiscutes = function(){
+    const getDiscutes = function(){
       return _homeData(0);
     }
-    var getGeneralDiscutes = function(){
+    const getGeneralDiscutes = function(){
       return _worldData(0);
     }
-    var getDiscuteById = function(id){
+    const getDiscuteById = function(id){
       return $rootScope.updateCurrentUser().then(function(){
-        return new Promise(function(resolve, reject){
-          $http.get('/api/discute/findById/'+id).then(function(data){
-            discutes = data.data.discute[0];
-            resolve(discutes);
-          });
+        return $http.get('/api/discute/findById/'+id).then(function(data){
+          return data.data.discute[0];
         });
-
       }).catch(function(err){
         console.log(err);
       });
     }
 
-    var deleteDiscute = function(discute){
+    const deleteDiscute = function(discute){
       if(discute.author === $rootScope.currentUser.username){
         $http.delete('/api/'+discute._id).then(function(data){
 
@@ -63,183 +53,163 @@ angular.module('discuteApp.services').factory('Discute', function($resource){
         });
       }
     }
-    var addDiscute = function(discute){
+    const addDiscute = function(discute){
       discutes.push(discute);
     }
 
-    var add_comment = function( comment, side, discute, username){
-      var newComment = {name: username, comment: comment};
-      if(side === 'right'){
-       discute.right.comments.push(newComment);
-     }
-     if(side === 'left'){
-       discute.left.comments.push(newComment);
-     }
-     _comment_discute(discute);
+    const add_comment = function(comment, side, discute, username){
+      $http.put('/api/comment/'+discute._id, {user: username, comment: comment, side: side})
+      .then(function(data){
+          _updateDiscute(discute, data.data.left, data.data.right);
+      })
+      .catch(function(err){
+          console.log(err);
+          AuthenticationService.Logout();
+          $state.go('login');
+      });
    }
 
-   var vote = function(side, discute, username){
-    var indexLeft = discute.left.votes.indexOf(username);
-    var indexRight = discute.right.votes.indexOf(username);
+   const vote = function(side, discute, username){
+    $http.put('/api/vote/'+discute._id, {user: username, side: side})
+    .then(function(data){
+        _updateDiscute(discute, data.data.left, data.data.right);
+    })
+    .catch(function(err){
+        console.log(err);
+        AuthenticationService.Logout();
+        $state.go('login');
+    });
+  }
 
-    if(side === 'right'){
-      if(indexRight < 0){
-        discute.right.votes.push(username)
-            //Als zowel rechts als links gevoted werd zal de vorige vote geannuleerd worden
-            if(indexLeft > -1)
-              discute.left.votes.splice(indexLeft, 1); 
-          }
-          else{
-            discute.right.votes.splice(indexRight, 1); 
-          } 
-        }
-        
-        if(side === 'left'){
-          if(indexLeft < 0){
-            discute.left.votes.push(username)
-            if(indexRight > -1)
-              discute.right.votes.splice(indexRight, 1); 
-          }
-          else{
-            discute.left.votes.splice(indexLeft, 1);	
-          }
-        }
-        _vote_discute(discute);
+  const delete_comment = function(side, comment, indexComment, discute, username){
+    if(comment.name === username){
+      let id;
+      if(side === 'left'){
+        id = discute.left.comments[indexComment]._id;
       }
-
-      var delete_comment = function(side, comment, indexComment, discute, username){
-        if(comment.name === username){
-          if(side === 'right'){
-            discute.right.comments.splice(indexComment, 1);	
-          }
-          if(side === 'left'){
-            discute.left.comments.splice(indexComment, 1);	
-          }
-          _comment_discute(discute);
-        }
+      if(side === 'right'){
+        id = discute.right.comments[indexComment]._id;
       }
-      var _vote_discute = function(discute){
-        $http.put('/api/vote/'+discute._id, discute).then(function(data){
-
-        }).catch(function(err){
+      $http.put('/api/uncomment/'+discute._id, {side: side, id: id})
+      .then(function(data){
+          _updateDiscute(discute, data.data.left, data.data.right);
+      })
+      .catch(function(err){
           console.log(err);
           AuthenticationService.Logout();
           $state.go('login');
+      });
+    }
+  }
+  const _updateDiscute = function(discute, left, right){
+    discute.right.votes = right.votes;
+    discute.right.comments = right.comments;
+    discute.left.votes = left.votes;
+    discute.left.comments = left.comments;
+  }
+  const search = function(name, array){
+    const index =  array === null? 0 : Math.floor(_calculateLenghtDiscutes(array) / 21);
+    if(name[0] === '#'){
+      return searchTag(name.slice(1), null);
+    }
+    else{
+      return new Promise(function(resolve, reject){
+        $http.get('/api/search/'+name.trim()+'/'+index).then(function(data){
+          discutes = data.data.discutes;
+          resolve(discutes);
         });
-      }
-      var _comment_discute = function(discute){
-        $http.put('/api/comment/'+discute._id, discute).then(function(data){
-
+      });
+    }
+  }
+  const searchTag = function(name, array){
+    const index =  array === null? 0 : Math.floor(_calculateLenghtDiscutes(array) / 21);
+    return new Promise(function(resolve, reject){
+      $http.get('/api/tag/'+name+'/'+index).then(function(data){
+        discutes = data.data.discutes;
+        resolve(discutes);
+      });
+    });
+  }
+  const tagAndOrder = function(name, sort, array){
+    const index =  Math.floor(_calculateLenghtDiscutes(array) / 21);
+    return new Promise(function(resolve, reject){
+      $http.get('/api/tagAndOrder/'+name.slice(1)+'/'+sort+'/'+index).then(function(data){
+        discutes = data.data.discutes;
+        resolve(discutes);
+      });
+    });
+  }
+  const orderBy = function(sort, array){
+    const index =  Math.floor(_calculateLenghtDiscutes(array) / 21); 
+    return new Promise(function(resolve, reject){
+      $http.get('/api/orderby/'+sort+'/'+index).then(function(data){
+        discutes = data.data.discutes;
+        resolve(discutes);
+      }).catch(function(err){
+        console.log(err);
+      });
+    });
+  }
+  const searchAndOrder = function(search, sort, array){
+    const index =  Math.floor(_calculateLenghtDiscutes(array) / 21);
+    if(search[0] === '#'){
+      return tagAndOrder(search, sort, array);
+    }
+    else{
+      return new Promise(function(resolve, reject){
+        $http.get('/api/searchAndOrder/'+search+'/'+sort+'/'+index).then(function(data){
+          discutes = data.data.discutes;
+          resolve(discutes);
         }).catch(function(err){
           console.log(err);
-          AuthenticationService.Logout();
-          $state.go('login');
         });
-      }
+      });
+    }
+  }
 
-      var search = function(name, array){
-        var index =  array === null? 0 : Math.floor(_calculateLenghtDiscutes(array) / 21);
-        if(name[0] === '#'){
-          return searchTag(name.slice(1), null);
-        }
-        else{
-          return new Promise(function(resolve, reject){
-            $http.get('/api/search/'+name.trim()+'/'+index).then(function(data){
-              discutes = data.data.discutes;
-              resolve(discutes);
-            });
-          });
-        }
+  const loadMore = function(sort, array, isOrdered, order, searchTerm){
+    let index;
+    switch(sort.toLowerCase()){
+      case 'home': {
+        index = Math.floor(array.length / 12);
+        return _homeData(index);
       }
-      var searchTag = function(name, array){
-        var index =  array === null? 0 : Math.floor(_calculateLenghtDiscutes(array) / 21);
-        return new Promise(function(resolve, reject){
-          $http.get('/api/tag/'+name+'/'+index).then(function(data){
-            discutes = data.data.discutes;
-            resolve(discutes);
-          });
-        });
+      case 'world': {
+        index = Math.floor(_calculateLenghtDiscutes(array) / 21);
+        return (angular.isUndefined(isOrdered) || !isOrdered) ?  _worldData(index): orderby(order, array);
       }
-      var tagAndOrder = function(name, sort, array){
-        var index =  Math.floor(_calculateLenghtDiscutes(array) / 21);
-        return new Promise(function(resolve, reject){
-          $http.get('/api/tagAndOrder/'+name.slice(1)+'/'+sort+'/'+index).then(function(data){
-            discutes = data.data.discutes;
-            resolve(discutes);
-          });
-        });
+      case 'search': {
+        return (angular.isUndefined(isOrdered) || !isOrdered) ? search(searchTerm, array): searchAndOrder(searchTerm, order, array);
       }
-      var orderBy = function(sort, array){
-        var index =  Math.floor(_calculateLenghtDiscutes(array) / 21); 
-        return new Promise(function(resolve, reject){
-          $http.get('/api/orderby/'+sort+'/'+index).then(function(data){
-            discutes = data.data.discutes;
-            resolve(discutes);
-          }).catch(function(err){
-            console.log(err);
-          });
-        });
+      case 'tag': {
+        index = Math.floor(_calculateLenghtDiscutes(array) / 21);
+        return (angular.isUndefined(isOrdered) || !isOrdered) ? searchTag(searchTerm.slice(1), array): tagAndOrder(searchTerm, order, array);
       }
-      var searchAndOrder = function(search, sort, array){
-        var index =  Math.floor(_calculateLenghtDiscutes(array) / 21);
-        if(search[0] === '#'){
-          return tagAndOrder(search, sort, array);
-        }
-        else{
-          return new Promise(function(resolve, reject){
-            $http.get('/api/searchAndOrder/'+search+'/'+sort+'/'+index).then(function(data){
-              discutes = data.data.discutes;
-              resolve(discutes);
-            }).catch(function(err){
-              console.log(err);
-            });
-          });
-        }
-      }
+    }
+  }
+  const _calculateLenghtDiscutes = function(discutes){
+    let length = 0;
+    discutes.forEach(function(array, index){
+      length += array.length;
+    })
+    return length;
+  }
 
-      var loadMore = function(sort, array, isOrdered, order, searchTerm){
-        var index;
-        switch(sort.toLowerCase()){
-          case 'home': {
-            index = Math.floor(array.length / 12);
-            return _homeData(index);
-          }
-          case 'world': {
-            index = Math.floor(_calculateLenghtDiscutes(array) / 21);
-            return (angular.isUndefined(isOrdered) || !isOrdered) ?  _worldData(index): orderby(order, array);
-          }
-          case 'search': {
-            return (angular.isUndefined(isOrdered) || !isOrdered) ? search(searchTerm, array): searchAndOrder(searchTerm, order, array);
-          }
-          case 'tag': {
-            index = Math.floor(_calculateLenghtDiscutes(array) / 21);
-            return (angular.isUndefined(isOrdered) || !isOrdered) ? searchTag(searchTerm.slice(1), array): tagAndOrder(searchTerm, order, array);
-          }
-        }
-      }
-      var _calculateLenghtDiscutes = function(discutes){
-        var length = 0;
-        discutes.forEach(function(array, index){
-          length += array.length;
-        })
-        return length;
-      }
+  return {
+    getDiscutes: getDiscutes,
+    getGeneralDiscutes: getGeneralDiscutes,
+    getDiscuteById: getDiscuteById,
+    deleteDiscute: deleteDiscute,
+    add_comment : add_comment,
+    vote: vote,
+    delete_comment: delete_comment,
+    orderBy: orderBy,
+    search: search,
+    searchTag: searchTag,
+    searchAndOrder: searchAndOrder,
+    tagAndOrder: tagAndOrder,
+    loadMore: loadMore
+  }
 
-      return {
-        getDiscutes: getDiscutes,
-        getGeneralDiscutes: getGeneralDiscutes,
-        getDiscuteById: getDiscuteById,
-        deleteDiscute: deleteDiscute,
-        add_comment : add_comment,
-        vote: vote,
-        delete_comment: delete_comment,
-        orderBy: orderBy,
-        search: search,
-        searchTag: searchTag,
-        searchAndOrder: searchAndOrder,
-        tagAndOrder: tagAndOrder,
-        loadMore: loadMore
-      }
-
-    })();
-  });
+})();
+});
