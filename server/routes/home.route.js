@@ -603,7 +603,7 @@ router.put('/comment/:discute_id', function(req, res, next){
 *@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
 */
 router.put('/uncomment/:discute_id', function(req, res, next){
-	req.discute.delete_comment(req.body.side, req.body.id, function(data, err){
+	req.discute.deleteComment(req.body.side, req.body.id, function(data, err){
 		if(err){ next(err);}
 		res.json({
 			left: {votes: data.left.votes, comments: data.left.comments},

@@ -70,7 +70,7 @@ DiscuteSchema.methods.comment= function(user, comment, side, cb){
 	}
 	this.save(cb(this));
 }
-DiscuteSchema.methods.delete_comment = function(side, id, cb){
+DiscuteSchema.methods.deleteComment = function(side, id, cb){
 	if(side === 'left'){
 		const comment = this.left.comments.find(e => e._id.toString() == id);
 		this.left.comments.remove(comment);

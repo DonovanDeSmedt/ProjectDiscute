@@ -1,10 +1,4 @@
-angular.module('discuteApp.service').factory('Discute', function($resource){ 
-  return $resource('/discute/:id', { id: '@_id' }, {
-    update: {
-      method: 'PUT' 
-    }
-  });
-}).factory('DModule', function(Discute, $state, $http,$rootScope, AuthenticationService, $cookies){ 
+angular.module('discuteApp.service').factory('DModule', function($state, $http,$rootScope, AuthenticationService, $cookies){ 
   return (function(){
 
     let discutes;
@@ -57,7 +51,7 @@ angular.module('discuteApp.service').factory('Discute', function($resource){
       discutes.push(discute);
     }
 
-    const add_comment = function(comment, side, discute, username){
+    const addComment = function(comment, side, discute, username){
       $http.put('/api/comment/'+discute._id, {user: username, comment: comment, side: side})
       .then(function(data){
           _updateDiscute(discute, data.data.left, data.data.right);
@@ -81,7 +75,7 @@ angular.module('discuteApp.service').factory('Discute', function($resource){
     });
   }
 
-  const delete_comment = function(side, comment, indexComment, discute, username){
+  const deleteComment = function(side, comment, indexComment, discute, username){
     if(comment.name === username){
       let id;
       if(side === 'left'){
@@ -200,9 +194,9 @@ angular.module('discuteApp.service').factory('Discute', function($resource){
     getGeneralDiscutes: getGeneralDiscutes,
     getDiscuteById: getDiscuteById,
     deleteDiscute: deleteDiscute,
-    add_comment : add_comment,
+    addComment : addComment,
     vote: vote,
-    delete_comment: delete_comment,
+    deleteComment: deleteComment,
     orderBy: orderBy,
     search: search,
     searchTag: searchTag,

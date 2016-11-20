@@ -6,7 +6,7 @@ function homeController($scope,$rootScope,$cookies, $state,$location, $http, Aut
 	self.logout = logout;
 	self.comment = comment;
 	self.vote = vote;
-	self.delete_comment = delete_comment;
+	self.deleteComment = deleteComment;
 	self.order = order;
 	self.closeSearch = closeSearch;
 	self.loadMore = loadMore;
@@ -37,7 +37,7 @@ function homeController($scope,$rootScope,$cookies, $state,$location, $http, Aut
 	function comment(comment, side, discute){
 		checkAvailability();
 		const index = self.discutes.indexOf(discute);
-		DModule.add_comment(comment, side, discute, $rootScope.currentUser.username);
+		DModule.addComment(comment, side, discute, $rootScope.currentUser.username);
 		if(index === -1){
 			if(side === 'right'){
 				$rootScope.currentDiscute.right.comment = "";
@@ -62,9 +62,9 @@ function homeController($scope,$rootScope,$cookies, $state,$location, $http, Aut
 		checkAvailability();
 		DModule.vote(side, discute, $rootScope.currentUser.username);
 	}
-	function delete_comment(side, comment, indexComment, discute){
+	function deleteComment(side, comment, indexComment, discute){
 		checkAvailability();
-		DModule.delete_comment(side, comment, indexComment, discute, $rootScope.currentUser.username);
+		DModule.deleteComment(side, comment, indexComment, discute, $rootScope.currentUser.username);
 	}
 	function order(sort){
 		self.isOrderedList = true;

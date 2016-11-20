@@ -26,7 +26,7 @@
             <textarea name="comment" id="" class="comment-section" cols="10" rows="1" ng-model="homeCtrl.discutes.left.comment"
             placeholder="write a comment..." ng-enter="profileCtrl.comment(homeCtrl.discutes.left.comment, 'left', homeCtrl.discutes)"></textarea>
             <div ng-repeat="comment in homeCtrl.discutes.left.comments track by $index" class="comment">
-              <p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="profileCtrl.delete_comment('left',comment, $index, homeCtrl.discutes)">
+              <p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="profileCtrl.deleteComment('left',comment, $index, homeCtrl.discutes)">
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@
         <div class="user-content" ng-show="profileCtrl.visible_right">
           <div class="item-block" >
             <div ng-repeat="comment in homeCtrl.discutes.right.comments track by $index" class="comment">
-              <p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="profileCtrl.delete_comment('right',comment, $index, homeCtrl.discutes)">
+              <p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="profileCtrl.deleteComment('right',comment, $index, homeCtrl.discutes)">
             </div>
             <textarea name="comment" id="" class="comment-section" cols="40" rows="1" ng-model="homeCtrl.discutes.right.comment"
             placeholder="write a comment..." ng-enter="comment(homeCtrl.discutes.right.comment, 'right', homeCtrl.discutes)"></textarea>

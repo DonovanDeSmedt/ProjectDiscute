@@ -169,15 +169,16 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
   }];
 }]);
 
-const checkLoggedIn = function($q, $timeout, $cookies,$http, $location, $rootScope, $state){
+const checkLoggedIn = function($q, $timeout, $cookies,$http, $location, $rootScope, $state, AuthenticationService){
   const deferred = $q.defer();
   const obj = $cookies.getObject('currentUser');
   $rootScope.prevURL = $location.path();
-  if($cookies.getObject('currentUser')!= null || !angular.isUndefined($rootScope.currentUser)){
+  if($cookies.getObject('currentUser')!= null){
     deferred.resolve();
   }
   else{
     // $rootScope.errorMessage = 'You need to log in';
+    AuthenticationService.Logout();
     deferred.reject();
     $state.go('login');
     window.location.href = '/#/login';

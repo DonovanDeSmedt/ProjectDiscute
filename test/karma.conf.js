@@ -11,7 +11,7 @@ module.exports = function(config) {
     ],
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '../',
 
 
     // frameworks to use
@@ -21,34 +21,40 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-    '../client/js/lib/angular.js',
-    '../client/js/lib/angular-mocks.js',
-    '../client/js/lib/angular-ui-router.min.js',
-    '../client/js/lib/ng-img-crop.js',
-    '../client/js/lib/ng-file-upload.js',
-    '../client/js/lib/angular-touch.min.js',
-    '../client/js/lib/angular-cookies.min.js',
-    '../client/js/lib/angular-resource.min.js',
-    '../client/js/lib/ng-file-upload-shim.js',
-    '../client/js/lib/angular-resource.min.js',
-    '../client/js/lib/jquery-3.0.0.min.js',
-    
-    '../client/js/lib/autosize.min.js',
+    'bower_components/angular/angular.min.js',
+    'bower_components/angular-mocks/angular-mocks.js',
+    'bower_components/angular-ui-router/release/angular-ui-router.min.js',
+    'bower_components/angular-cookies/angular-cookies.min.js',
+    'bower_components/angular-resource/angular-resource.min.js',
+    'bower_components/jquery/dist/jquery.min.js',
+    'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+    'bower_components/karma-read-json/karma-read-json.js',
+
+    'client/js/app.js',
+
+    // // Controllers
+    // '../client/js/home/home.controller.js',
+
+    // // Services
+    // '../client/js/services/authentication.service.js',
+    // '../client/js/services/module.service.js',
+
+    // // Test files
+    // // './*.js',
+    // // '../client/js/test/app_test.js',
+    'client/js/services/index.service.js',
+    'client/js/services/authentication.service.js',
+    'client/js/services/module.service.js',
+    // 'client/js/test/users.js',
 
 
-    '../client/js/app.js',
+    /*Tests*/
+    '../Discute/client/js/test/dmodule_test.js',
+    // 'client/js/test/homeController_test.js',
 
-    // Controllers
-    '../client/js/controller/home.controller.js',
+    /*JSON fixture*/
+    { pattern: 'client/js/test/*.json', watched: false, included: false, served: true}
 
-    // Services
-    '../client/js/services/authentication.service.js',
-    '../client/js/services/module.service.js',
-
-    // Test files
-    './*.js',
-    '../client/js/test/app_test.js',
-    // '../client/js/test/homeController_test.js'
     ],
 
 

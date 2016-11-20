@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 angular.module('discuteApp.profile', []).controller('ProfileController', profileCtrl);
- function profileCtrl($scope,$rootScope, $state,$stateParams,$cookies,$window, $http, AuthenticationService, Discute,DModule, Upload){
+ function profileCtrl($scope,$rootScope, $state,$stateParams,$cookies,$window, $http, AuthenticationService,DModule, Upload){
 	let self = this;
 	self.getUser = getUser;
 	self.editProfileForm = editProfileForm;
@@ -10,7 +10,7 @@ angular.module('discuteApp.profile', []).controller('ProfileController', profile
 	self.comment = comment;
 	self.vote = vote;
 	self.follow = follow;
-	self.delete_comment = delete_comment;
+	self.deleteComment = deleteComment;
 	self.deleteDiscute  = deleteDiscute;
 	self.logout = logout;
 	self.closeModal = closeModal;
@@ -92,11 +92,11 @@ angular.module('discuteApp.profile', []).controller('ProfileController', profile
 	}
 	function comment(comment, side, discute){
 		checkAvailability();
-		DModule.add_comment(comment, side, discute, $rootScope.currentUser.username);
-		if(side === 'right'){
+		DModule.addComment(comment, side, discute, $rootScope.currentUser.username);
+		if(side === 'right' && angular.isDefined($rootScope.currentDiscute)){
 			$rootScope.currentDiscute.right.comment = "";
 		}
-		if(side === 'left'){
+		if(side === 'left' && angular.isDefined($rootScope.currentDiscute)){
 			$rootScope.currentDiscute.left.comment = "";
 		}
 	}
@@ -104,9 +104,9 @@ angular.module('discuteApp.profile', []).controller('ProfileController', profile
 		checkAvailability();
 		DModule.vote(side, discute, $rootScope.currentUser.username);
 	}
-	function delete_comment(side, comment, indexComment, discute){
+	function deleteComment(side, comment, indexComment, discute){
 		checkAvailability();
-		DModule.delete_comment(side, comment, indexComment, discute, $rootScope.currentUser.username);
+		DModule.deleteComment(side, comment, indexComment, discute, $rootScope.currentUser.username);
 	}
 	
 	function deleteDiscute(){

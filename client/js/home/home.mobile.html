@@ -23,7 +23,7 @@
 						<textarea name="comment" id="" class="comment-section" cols="10" rows="1" ng-model="discute.left.comment"
 						placeholder="write a comment..." ng-enter="homeCtrl.comment(discute.left.comment, 'left', discute)"></textarea>
 						<div ng-repeat="comment in discute.left.comments track by $index" class="comment">
-							<p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="homeCtrl.delete_comment('left',comment, $index, discute)">
+							<p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="homeCtrl.deleteComment('left',comment, $index, discute)">
 						</div>
 					</div>
 				</div>
@@ -80,7 +80,7 @@
 				<div class="user-content" ng-show="homeCtrl.visible_right">
 					<div class="item-block" >
 						<div ng-repeat="comment in discute.right.comments track by $index" class="comment">
-							<p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="homeCtrl.delete_comment('right',comment, $index, discute)">
+							<p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="homeCtrl.deleteComment('right',comment, $index, discute)">
 						</div>
 						<textarea name="comment" id="" class="comment-section" cols="40" rows="1" ng-model="discute.right.comment"
 						placeholder="write a comment..." ng-enter="homeCtrl.comment(discute.right.comment, 'right', discute)"></textarea>
