@@ -42,9 +42,10 @@ module.exports = function(config) {
     // // Test files
     // // './*.js',
     // // '../client/js/test/app_test.js',
-    'client/js/services/index.service.js',
-    'client/js/services/authentication.service.js',
-    'client/js/services/module.service.js',
+    // 'client/js/services/index.service.js',
+    // 'client/js/services/authentication.service.js',
+    // 'client/js/services/module.service.js',
+    'client/js/home/home.controller.js',
     // 'client/js/test/users.js',
 
 

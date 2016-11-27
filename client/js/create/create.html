@@ -10,7 +10,7 @@
 						<div class="imgSearchBar">
 							<input type="text" placeholder="search picture" ng-model="createCtrl.imgSearchLeft" class="imgSearch">
 						</div>
-						<div ng-click="createCtrl.customSearch(imgSearchLeft, 'left')" class="btn btn-upload-sm"> Search</div>
+						<div ng-click="createCtrl.customSearch(createCtrl.imgSearchLeft, 'left')" class="btn btn-upload-sm"> Search</div>
 					</div>
 					<h3 class="text-center title"><input type="text" class="text-center no-border" ng-model="createCtrl.discute.left_title" placeholder="add a title"></h3>
 					
@@ -146,7 +146,7 @@
 	</div>
 
 	<form name="myForm">
-		<button ngf-select ng-model="discute.picture.left" id="upload-image-left" style="display:none" accept="image/*">Select Picture</button>
+		<button ngf-select ng-model="discute.picture.left" id="upload-image-left" accept="image/*">Select Picture</button>
 		<button ngf-select ng-model="discute.picture.right" id="upload-image-right" style="display:none" accept="image/*">Select Picture</button>
 	</form>
 </div>

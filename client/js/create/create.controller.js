@@ -1,7 +1,7 @@
 (function(){
 	'use strict';
 angular.module('discuteApp.create', []).controller('CreateController',createCtrl);
- 	function createCtrl($scope,$rootScope,$cookies, $state, $http, AuthenticationService, Upload, DModule){
+ 	function createCtrl($scope,$rootScope,$cookies, $state, $http, AuthenticationService, Upload, DModule, $timeout){
 	let self = this;
 	self.app = "iDiscute";
 	self.discute= {};
@@ -16,10 +16,14 @@ angular.module('discuteApp.create', []).controller('CreateController',createCtrl
 	autosize($('textarea'));
 	function triggerUpload(side){
 		if(side === 'left'){
-			$("#upload-image-left").click();
+			$timeout(function(){
+				$("#upload-image-left").click();
+			})
 		}
-		if(side === 'right'){
-			$("#upload-image-right").click();
+		else if(side === 'right'){
+			$timeout(function(){
+				$("#upload-image-right").click();
+			})
 		}
 	}
 	$scope.$watch('discute.description', function (newValue, oldValue) {

@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 angular.module('discuteApp.profile', []).controller('ProfileController', profileCtrl);
- function profileCtrl($scope,$rootScope, $state,$stateParams,$cookies,$window, $http, AuthenticationService,DModule, Upload){
+ function profileCtrl($scope,$rootScope, $state,$stateParams,$cookies,$window, $http, AuthenticationService,DModule, Upload, ProfileService){
 	let self = this;
 	self.getUser = getUser;
 	self.editProfileForm = editProfileForm;
@@ -21,7 +21,7 @@ angular.module('discuteApp.profile', []).controller('ProfileController', profile
 	self.upload_picture = upload_picture;
 
 	function getUser(){
-		$http.get('/user/'+$stateParams.username).then(function(user){
+		ProfileService.getUser($stateParams.username).then(function(user){
 			self.user = {};
 			self.user.username = user.data.username;
 			self.user.email = user.data.email;
@@ -115,7 +115,7 @@ angular.module('discuteApp.profile', []).controller('ProfileController', profile
 				$rootScope.currentDiscuteArray[$rootScope.parentIndex][$rootScope.index] = null;
 				DModule.deleteDiscute($rootScope.currentDiscute);
 				$('#discuteModal').modal('hide');
-				$rootScope.$apply();
+				$scope.$apply();
 				 $window.location.reload();
 			}
 		}); 
@@ -139,16 +139,13 @@ angular.module('discuteApp.profile', []).controller('ProfileController', profile
 		let fd = new FormData();
 		if(picture != null){
 			fd.append('picture', Upload.dataUrltoBlob(picture, 'profilePicture'));
-			$http.put('/user/profile_picture/'+$rootScope.currentUser.username, fd, {
-				transformRequest: angular.indentity,
-				headers: { 'Content-Type': undefined }
-			}).then(function(data){
+			ProfileService.updateProfilePicture($rootScope.currentUser.username, fd).then(function(data){
 				console.log("Successfuly updated profile picture")
 			});
 		}
 	}
 	function update_account(oldUser, newUser){
-		$http.put('/user/account/'+$rootScope.currentUser.username, {old: oldUser, new: newUser}).then(function(data){
+		ProfileService.updateAccount($rootScope.currentUser.username, oldUser, newUser).then(function(data){
 			console.log("Successfuly updated useraccount")
 			$rootScope.currentUser.username = newUser.username;
 			$rootScope.currentUser.email = newUser.email;
@@ -172,7 +169,7 @@ angular.module('discuteApp.profile', []).controller('ProfileController', profile
 		})
 	}
 	function update_password(user){
-		$http.put('/user/changePassword/', {currentPassword: user.currentPassword, password: user.newPassword, email: $rootScope.currentUser.email}).then(function(data){
+		ProfileService.updatePassword(user.currentPassword, user.newPassword,  $rootScope.currentUser.email).then(function(data){
 			if(data.data.success){
 				console.log("Successfuly updated password")
 				self.currentPasswordError = false;
