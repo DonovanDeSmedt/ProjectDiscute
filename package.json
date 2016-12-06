@@ -15,6 +15,7 @@
     "babelify": "^7.2.0",
     "blob-to-buffer": "^1.2.6",
     "body-parser": "^1.15.2",
+    "bower": "^1.7.9",
     "cloudinary": "^1.4.6",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
