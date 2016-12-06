@@ -3,10 +3,10 @@
 	<div class="row">
 		<div class="form-group">
 			<div class="col-md-3 hidden-sm hidden-xs" data-toggle="modal" data-target="#profilePictureModal">
-				<img ng-src="pictures/profile/{{currentUser.username}}.profile" alt="" class="img-circle edit-picture">
+				<img ng-src="{{rootImgUrl}}{{currentUser.username}}.profile.png" alt="" class="img-circle edit-picture">
 			</div>
 			<div class="hidden-lg hidden-md text-center" data-toggle="modal" data-target="#profilePictureModal">
-				<img ng-src="pictures/profile/{{currentUser.username}}.profile" alt="" class="img-circle edit-picture">
+				<img ng-src="{{rootImgUrl}}{{currentUser.username}}.profile.png" alt="" class="img-circle edit-picture">
 			</div>
 			<div class="col-md-9 text-center">
 				<h3>{{profileCtrl.user.username}}</h3>

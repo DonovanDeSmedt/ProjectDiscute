@@ -1,0 +1,60 @@
+[
+    {
+        "_id" : "5798f385281579aa08efbc1e",
+        "description" : "KAA Gent vs Club Brugge, make your choice",
+        "author" : "donovan",
+        "tags" : [ 
+            "#Gent", 
+            "#Brugge"
+        ],
+        "right" : {
+            "title" : "Club Brugge",
+            "comments" : [],
+            "votes" : [],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "donovan1469641605243"
+            }
+        },
+        "left" : {
+            "title" : "KAA GENT",
+            "comments" : [],
+            "votes" : [ 
+                "donovan"
+            ],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "donovan1469641605242"
+            }
+        }
+    },
+    {
+        "_id" : "5798f385281579aa08efbc1e",
+        "description" : "KAA Gent vs Club Brugge, make your choice",
+        "author" : "donovan",
+        "tags" : [ 
+            "#Gent", 
+            "#Brugge"
+        ],
+        "right" : {
+            "title" : "Club Brugge",
+            "comments" : [],
+            "votes" : [],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "donovan1469641605243"
+            }
+        },
+        "left" : {
+            "title" : "KAA GENT",
+            "comments" : [{"name": "james", "comment": "test"}],
+            "votes" : [ 
+                "donovan"
+            ],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "donovan1469641605242"
+            }
+        }
+    }
+]

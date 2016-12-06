@@ -1,0 +1,32 @@
+[
+	{
+		"_id" : "5798e78930dc4c2308587ed8",
+		"password" : "$2a$10$Q9cJchs8.cdEFUAy/gUi3eMnKybL.Tshdwr8lJym/1GjYtL3uImxS",
+		"username" : "donovan",
+		"email" : "donovandesmedt@skynet.be",
+		"following" : [ 
+			"jenniferlawrenceinform", 
+			"obama_official"
+		],
+		"followers" : [ 
+			"donald jr trumph", 
+			"obama_official", 
+			"zuck"
+		],
+	},
+	{
+		"_id" : "5798ebd92e42e5550894b47f",
+		"password" : "$2a$10$KdZCaPwa1796UL5Nhedc/epKJgCkEW45LeRXMfXF80HK9V0KcWCxC",
+		"username" : "obama_official",
+		"email" : "obama@gov.us",
+		"following" : [ 
+			"donald jr trumph", 
+			"donovan", 
+			"jenniferlawrenceinform"
+		],
+		"followers" : [ 
+			"zuck", 
+			"donovan"
+		],
+	}
+]

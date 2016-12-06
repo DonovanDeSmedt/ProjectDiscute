@@ -2,11 +2,11 @@
 	<div class="row discutes-profile" ng-repeat="discuteArray in homeCtrl.searchDiscutes || homeCtrl.discutes track by $index">
 		<div ng-repeat="discute in discuteArray track by $index" class="discute-block">
 			<div class="discute-block-content"  ui-sref="mobile-discute-view({id: discute._id})">
-					<img ng-src="pictures/{{discute.left.picture}}" alt="" >
-					<img ng-src="pictures/{{discute.right.picture}}" alt="">
+					<img ng-src="{{rootImgUrl}}{{discute.left.picture}}.png" alt="" >
+					<img ng-src="{{rootImgUrl}}{{discute.right.picture}}.png" alt="">
 			</div>
 			<div class="discute-block-info">
-				<img ng-src="pictures/profile/{{discute.author}}.profile" alt="" ui-sref="user({username: discute.author})" class="profile-picture img-circle">
+				<img ng-src="{{rootImgUrl}}{{discute.author}}.profile.png" alt="" ui-sref="user({username: discute.author})" class="profile-picture img-circle">
 				<div class="left-votes" ios-dblclick="homeCtrl.vote('left', discute)" ng-dblclick="homeCtrl.vote('left', discute)">
 					<i class="fa fa-thumbs-o-up fa-lg"></i>
 					<span>{{discute.left.votes.length}}</span>

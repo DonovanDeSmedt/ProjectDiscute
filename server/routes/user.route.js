@@ -6,6 +6,8 @@ var fs = require('fs');
 var conn = mongoose.connection;
 Grid.mongo = mongoose.mongo;
 var sharp = require('sharp');
+var cloudinary = require('cloudinary');
+
 
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
@@ -117,18 +119,27 @@ router.put('/profile_picture/:username', function(req, res, next){
 	.on('info', function(info) {
 		console.log('Image height is ' + info.height);
 	});
+
+	var stream = cloudinary.uploader.upload_stream(function(result) {
+    	console.log(result);
+  		res.send("Succes");
+  	}.bind(this), { public_id: fileName } );
+
+
 	var writeStreamDB = gfs.createWriteStream({
 		filename: fileName
 	});
 
-	gfs.remove({filename: fileName}, function(err){
-		if(err){
-			console.log(err);
-		}
-		else{
-			readStream.pipe(transformer).pipe(writeStreamDB);
-		}
-	})
+	readStream.pipe(transformer).pipe(stream);
+
+	// gfs.remove({filename: fileName}, function(err){
+	// 	if(err){
+	// 		console.log(err);
+	// 	}
+	// 	else{
+	// 		readStream.pipe(transformer).pipe(writeStreamDB);
+	// 	}
+	// })
 });
 /**
 *@api {put} /user/changePassword Change password

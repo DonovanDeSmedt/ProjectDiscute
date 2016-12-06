@@ -29,8 +29,11 @@ module.exports = function(config) {
     'bower_components/jquery/dist/jquery.min.js',
     'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
     'bower_components/karma-read-json/karma-read-json.js',
+    'bower_components/angular-touch/angular-touch.min.js',
+    'bower_components/ng-file-upload/ng-file-upload-all.min.js',
+    'client/lib/ng-img-crop.js',
 
-    'client/js/app.js',
+    // 'client/js/app.js',
 
     // // Controllers
     // '../client/js/home/home.controller.js',
@@ -43,18 +46,20 @@ module.exports = function(config) {
     // // './*.js',
     // // '../client/js/test/app_test.js',
     // 'client/js/services/index.service.js',
-    // 'client/js/services/authentication.service.js',
-    // 'client/js/services/module.service.js',
-    'client/js/home/home.controller.js',
-    // 'client/js/test/users.js',
+    'client/js/services/authentication.service.js',
+    'client/js/services/module.service.js',
+    'client/js/services/profile.service.js',
+    // 'client/js/home/home.controller.js',
+    // 'client/test/users.js',
 
 
     /*Tests*/
-    '../Discute/client/js/test/dmodule_test.js',
-    // 'client/js/test/homeController_test.js',
+    '../Discute/client/test/dmodule_test.js',
+    '../Discute/client/test/profileService_test.js',
+    // 'client/test/homeController_test.js',
 
     /*JSON fixture*/
-    { pattern: 'client/js/test/*.json', watched: false, included: false, served: true}
+    { pattern: 'client/test/*.json', watched: false, included: false, served: true}
 
     ],
 

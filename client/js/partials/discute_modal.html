@@ -5,7 +5,7 @@
         <div class="modal-block-left">
           <article class="discute-side">
             <div class="main-content">
-              <img ng-src="pictures/{{currentDiscute.left.picture}}" ng-dblclick="profileCtrl.vote('left', currentDiscute)" alt="{{currentDiscute.left.title}}" class="topic image">
+              <img ng-src="{{rootImgUrl}}{{currentDiscute.left.picture}}.png" ng-dblclick="profileCtrl.vote('left', currentDiscute)" alt="{{currentDiscute.left.title}}" class="topic image">
               <h3 class="text-center title">{{currentDiscute.left.title}}</h3>
               <div class="item-block icons">
                 <div class="votes" ng-click="profileCtrl.vote('left', currentDiscute)">
@@ -30,8 +30,8 @@
           </article>
         </div>
         <div class="modal-block-center" >
-          <header class="text-center" ng-click="closeModal()">
-            <img ng-src="pictures/profile/{{currentDiscute.author}}.profile" alt="" ui-sref="user({username: currentDiscute.author})" class="profile-picture img-circle" >
+          <header class="text-center" ng-click="profileCtrl.closeModal()">
+            <img ng-src="{{rootImgUrl}}{{currentDiscute.author}}.profile.png" alt="" ui-sref="user({username: currentDiscute.author})" class="profile-picture img-circle" >
             <a ui-sref="user({username: currentDiscute.author})" class="discuter">{{currentDiscute.author}}</a>
           </header>
           <article class="description text-center">
@@ -52,7 +52,7 @@
         <div class="modal-block-right">
           <article class="discute-side">
             <div class="main-content">
-              <img ng-src="pictures/{{currentDiscute.right.picture}}"  ng-dblclick="profileCtrl.vote('right', currentDiscute)" alt="{{currentDiscute.right.title}}" class="topic image">
+              <img ng-src="{{rootImgUrl}}{{currentDiscute.right.picture}}.png"  ng-dblclick="profileCtrl.vote('right', currentDiscute)" alt="{{currentDiscute.right.title}}" class="topic image">
               <h3 class="text-center title">{{currentDiscute.right.title}}</h3>
               <div class="item-block icons">
                 <div class="votes" ng-click="profileCtrl.vote('right', currentDiscute)">

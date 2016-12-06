@@ -1,0 +1,9 @@
+{
+    "_id" : "5840568d8af5e00766350ff1",
+    "username" : "donovan",
+    "email" : "donovandesmedt@skynet.be",
+    "followers" : [],
+    "following" : [ 
+        "donovan"
+    ]
+}

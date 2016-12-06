@@ -3,7 +3,7 @@
 		<div class="user-info">
 			<header class="text-center col-sm-12 col-xs-12">
 				<div class="pull-left">
-					<img ng-src="pictures/profile/{{discute.author}}.profile" alt="" ui-sref="user({username: discute.author})" class="profile-picture img-circle">
+					<img ng-src="{{rootImgUrl}}{{discute.author}}.profile.png" alt="" ui-sref="user({username: discute.author})" class="profile-picture img-circle">
 					<a ui-sref="user({username: discute.author})"  class="discuter">{{discute.author}}</a>
 				</div>
 				<div class="date pull-right">
@@ -39,7 +39,7 @@
 					<h3 class="text-center title">{{discute.left.title}}</h3>
 
 					<div class="main-content-img">
-						<img ng-src="pictures/{{discute.left.picture}}" ios-dblclick="homeCtrl.vote('left', discute)" ng-dblclick="homeCtrl.vote('left', discute)" alt="{{discute.left.title}}" class="topic image">
+						<img ng-src="{{rootImgUrl}}{{discute.left.picture}}.png" ios-dblclick="homeCtrl.vote('left', discute)" ng-dblclick="homeCtrl.vote('left', discute)" alt="{{discute.left.title}}" class="topic image">
 					</div>		
 				</div>
 			</article>
@@ -65,7 +65,7 @@
 			<article class="discute-side">
 				<div class="main-content">
 					<div class="main-content-img">
-						<img ng-src="pictures/{{discute.right.picture}}"  ios-dblclick="homeCtrl.vote('right', discute)" ng-dblclick="homeCtrl.vote('right', discute)" alt="{{discute.right.title}}" class="topic image">
+						<img ng-src="{{rootImgUrl}}{{discute.right.picture}}.png"  ios-dblclick="homeCtrl.vote('right', discute)" ng-dblclick="homeCtrl.vote('right', discute)" alt="{{discute.right.title}}" class="topic image">
 						<h3 class="text-center title">{{discute.right.title}}</h3>
 					</div>
 					<div class="item-block icons">

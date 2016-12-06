@@ -1,1 +1,1 @@
-angular.module('discuteApp.auth',[]);
+// angular.module('discuteApp.auth',[]);

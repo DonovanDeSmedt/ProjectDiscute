@@ -1,1 +1,1 @@
-define({  "name": "Discute",  "version": "1.0.0",  "description": "",  "sampleUrl": false,  "apidoc": "0.2.0",  "generator": {    "name": "apidoc",    "time": "2016-09-30T20:18:34.631Z",    "url": "http://apidocjs.com",    "version": "0.16.1"  }});
+define({  "name": "Discute",  "version": "1.0.0",  "description": "",  "sampleUrl": false,  "apidoc": "0.2.0",  "generator": {    "name": "apidoc",    "time": "2016-12-02T20:25:45.968Z",    "url": "http://apidocjs.com",    "version": "0.16.1"  }});

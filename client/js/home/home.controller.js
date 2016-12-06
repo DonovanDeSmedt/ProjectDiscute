@@ -1,23 +1,22 @@
 (function () {
-  'use strict';
-angular.module('discuteApp.home', []).controller('HomeController', homeController);
-function homeController($scope,$rootScope,$cookies, $state,$location, $http, AuthenticationService, DModule, data){
-	let self = this;
-	self.logout = logout;
-	self.comment = comment;
-	self.vote = vote;
-	self.deleteComment = deleteComment;
-	self.order = order;
-	self.closeSearch = closeSearch;
-	self.loadMore = loadMore;
-	self.initDropDown = initDropDown;
-	self.complementDiscutes = complementDiscutes;
-	self.checkAvailability = checkAvailability;
-	self.search = search;
+	'use strict';
+	angular.module('discuteApp.home', [])
+	.controller('HomeController', ['$scope', '$rootScope', '$cookies', '$state', '$location','AuthenticationService', 'DModule', 'data', homeController]);
+	function homeController($scope,$rootScope,$cookies, $state,$location, AuthenticationService, DModule, data){
+		let self = this;
+		self.logout = logout;
+		self.comment = comment;
+		self.vote = vote;
+		self.deleteComment = deleteComment;
+		self.order = order;
+		self.closeSearch = closeSearch;
+		self.loadMore = loadMore;
+		self.initDropDown = initDropDown;
+		self.complementDiscutes = complementDiscutes;
+		self.checkAvailability = checkAvailability;
+		self.search = search;
 
-
-
-	
+		
 	// Setting 
 	autosize($('textarea'));
 	self.discutes = data;
@@ -150,6 +149,5 @@ function homeController($scope,$rootScope,$cookies, $state,$location, $http, Aut
 			$state.go('login');
 		}
 	}
-	// $rootScope.updateCurrentUser();
 }
 })();

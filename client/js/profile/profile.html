@@ -1,7 +1,7 @@
 <div class="hidden-sm hidden-xs">
 <div class="profile-header row" data-ng-init="profileCtrl.getUser()">
   <div class="col-md-offset-2 col-md-2">
-    <img ng-src="pictures/profile/{{profileCtrl.user.username}}.profile" class="img-circle img-responsive img" ng-class="currentUser.username === profileCtrl.user.username ? 'own-profile' : currentUser.following.indexOf(profileCtrl.user.username) < 0 ? 'follow': 'following'" ng-click="profileCtrl.follow(profileCtrl.user.username)">
+    <img ng-src="{{rootImgUrl}}{{profileCtrl.user.username}}.profile.png" class="img-circle img-responsive img" ng-class="currentUser.username === profileCtrl.user.username ? 'own-profile' : currentUser.following.indexOf(profileCtrl.user.username) < 0 ? 'follow': 'following'" ng-click="profileCtrl.follow(profileCtrl.user.username)">
   </div>
   <div class="col-md-offset-1 col-md-4">
     <div class="personal-info">
@@ -27,10 +27,10 @@
     <div ng-repeat="discute in discutes track by $index" class="discute-block" ng-click="setCurrentDiscute($index, $parent.$index, profileCtrl.user.discuteArray)">
       <div class="discute-block-content"  data-toggle="modal" data-target="#discuteModal">
         <div class="left-side pull-left">
-          <img ng-src="pictures/{{discute.left.picture}}" alt="" >
+          <img ng-src="{{rootImgUrl}}{{discute.left.picture}}.png" alt="" >
         </div>
         <div class="right-side pull-right">
-          <img ng-src="pictures/{{discute.right.picture}}" alt="">
+          <img ng-src="{{rootImgUrl}}{{discute.right.picture}}.png" alt="">
         </div>
         <div class="info-block">
           <header>

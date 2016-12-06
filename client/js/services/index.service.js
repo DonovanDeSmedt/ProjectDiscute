@@ -1,1 +1,1 @@
-angular.module('discuteApp.service',['ngCookies']);
+// angular.module('discuteApp.service',['ngCookies']);

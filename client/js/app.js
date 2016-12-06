@@ -8,8 +8,8 @@ const requires = [
   'discuteApp.home',
   'discuteApp.profile',
   'discuteApp.create',
-  'discuteApp.global',
   'discuteApp.service',
+  'discuteApp.global',
   'discuteApp.auth',
   'discuteApp.directive'
 ];
@@ -98,9 +98,12 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
   controllerAs: 'homeCtrl',
   resolve: {
    logincheck: checkLoggedIn,
-   data: function(DModule,$stateParams){
+   data: function(DModule,$stateParams, $state){
     return DModule.getDiscuteById($stateParams.id).then(function(discute){
       return discute;
+    }).catch(function(err) {
+      console.log(err);
+      $state.go('404');
     });
   }
 }
@@ -133,10 +136,19 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
   url:'/register',
   templateUrl:'js/auth/register.html',
   controller:'RegisterController'
+}).state('api',{
+  cache: false,
+  url:'/api',
+  resolve: {
+    api: function() {
+      window.location.href = "apidoc/index.html";
+    }
+  },
+  templateUrl: 'apidoc/index.html'
 }).state('404',{
   cache: false,
   url:'/404',
-  templateUrl:'views/404.html',
+  templateUrl:'js/404/404.html',
   controller:'GlobalController'
 });
 }).constant('_', window._).run(function($state, $http, $cookies){

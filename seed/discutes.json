@@ -1,0 +1,108 @@
+[
+    {
+        "_id" : "5798f385281579aa08efbc1e",
+        "description" : "KAA Gent vs Club Brugge, make your choice",
+        "author" : "donovan",
+        "tags" : [ 
+            "#Gent", 
+            "#Brugge"
+        ],
+        "right" : {
+            "title" : "Club Brugge",
+            "comments" : [],
+            "votes" : [],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "donovan1469641605243"
+            }
+        },
+        "left" : {
+            "title" : "KAA GENT",
+            "comments" : [],
+            "votes" : [ 
+                "donovan"
+            ],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "donovan1469641605242"
+            }
+        }
+    },
+    {
+        "_id" : "5798f522281579aa08efbc3b",
+        "description" : "Lamborghini Huracan vs Ferrari F12 Berlinetta",
+        "author" : "obama_official",
+        "date" : "2016-07-26T15:12:20.516Z",
+        "tags" : [ 
+            "#Lamborghini", 
+            "#Ferrari"
+        ],
+        "right" : {
+            "title" : "Ferrari F12 Berlinetta",
+            "comments" : [ 
+                {
+                    "name" : "donald jr trumph",
+                    "comment" : "This car is huge :)",
+                    "_id" : "5798f755281579aa08efbc7c"
+                }, 
+                {
+                    "name" : "donovan",
+                    "comment" : "The v12 sounds so much better !!!",
+                    "_id" : "57e2c455f2ebd3b001e89ace"
+                }
+            ],
+            "votes" : [ 
+                "jenniferlawrenceinform", 
+                "donovan"
+            ],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "obama_official1469642018896"
+            }
+        },
+        "left" : {
+            "title" : "Lamborghini Huracan",
+            "comments" : [],
+            "votes" : [ 
+                "donald jr trumph"
+            ],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "obama_official1469642018895"
+            }
+        },
+    },
+    {
+        "_id" : "57b87bab25760476054f5db8",
+        "description" : "Which festival should I go to next year? Any fans?",
+        "author" : "donovan",
+        "tags" : [ 
+            "#Tomorrowland", 
+            "#RockWerchter", 
+            "#Festival"
+        ],
+        "date" : "2016-08-20T15:47:55.979Z",
+        "right" : {
+            "title" : "Rock Werchter",
+            "comments" : [],
+            "votes" : [ 
+                "donovan"
+            ],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "donovan1471708075979"
+            }
+        },
+        "left" : {
+            "title" : "Tomorrowland",
+            "comments" : [],
+            "votes" : [ 
+                "obama_official"
+            ],
+            "picture" : {
+                "extension" : "image/png",
+                "fileName" : "donovan1471708075978"
+            }
+        }
+    }
+]

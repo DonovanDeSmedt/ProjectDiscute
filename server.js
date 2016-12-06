@@ -12,6 +12,8 @@ var passport = require('passport');
 // var LocalStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var cloudinary = require('cloudinary');
+
 
 // Add middleware necessary for REST API's;
 app.use(cookieParser());
@@ -35,6 +37,14 @@ app.use(multer({
   }
 }).any());
 
+cloudinary.config({ 
+  cloud_name: 'dvf32xjxh', 
+  api_key: '761349943617292', 
+  api_secret: 'P62MtH5ci42qmnDnHOiIY2Meh6A' 
+});
+
+
+
 
 // CORS Support
 app.use(function(req, res, next) {
@@ -47,11 +57,15 @@ app.use(function(req, res, next) {
 // Shortcuts
 app.use('/bower_components', express.static(__dirname + '/bower_components'))
 app.use('/js', express.static(__dirname + '/client/js'));
+app.use('/vendor', express.static(__dirname + '/apidoc/vendor'));
+app.use('/scripts', express.static(__dirname + '/client/scripts'));
+app.use('/lib', express.static(__dirname + '/client/lib'));
 app.use('/css', express.static(__dirname + '/client/css'));
 app.use('/views', express.static(__dirname + '/client/views'));
 app.use('/images', express.static(__dirname + '/client/images'));
 app.use('/uploads', express.static(__dirname + '/uploads'));
 app.use('/fonts', express.static(__dirname + '/client/fonts'));
+app.use('/dist', express.static(__dirname + '/dist'));
 
 app.set('json spaces', 2);
 
@@ -72,18 +86,31 @@ mongoose.connect(config.database);
 // Passport strategy
 require('./server/config/passport')(passport);
 
+app.use(express.static('public'));
 
 // Init go to index.html
 app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/client/index.html');
 });
+
+//Api doc
+// app.get('/api', function (req, res) {
+//   console.log("API");
+//   res.sendFile(__dirname + '/apidoc/index.html');
+// });
 // Routes
-app.use('/api', passport.authenticate('jwt', {session: false}), require('./server/routes/home.route.js'));
+app.use('/discute', passport.authenticate('jwt', {session: false}), require('./server/routes/home.route.js'));
+app.use('/search', passport.authenticate('jwt', {session: false}), require('./server/routes/search.route.js'));
+app.use('/pictures/', passport.authenticate('jwt', {session: false}), require('./server/routes/picture.route.js'));
 app.use('/login', require('./server/routes/login.route.js'));
 app.use('/register', require('./server/routes/register.route.js'));
 app.use('/user', passport.authenticate('jwt', {session: false}), require('./server/routes/user.route.js'));
 
-app.use('/pictures/', require('./server/routes/picture.route.js'));
+
+
+
+
+
 
 // Error handling
 app.use(function(err, req, res, next) {
