@@ -4,7 +4,6 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "init": "npm install && bower install",
     "start": "grunt min",
     "postinstall": "bower cache clean && bower install"
   },
