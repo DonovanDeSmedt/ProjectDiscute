@@ -12,7 +12,13 @@ The look and feel are familiar with the other well known social media. You can f
 ##World vs Friends
 The application consists of the 2 parts, a 'world' and a 'friends' part. On the world page you'll find all the trending posts, furthermore you can search for things, people or tags. On the friends page, you'll see the latest posts of the people you follow.
 
+## Demo
 Check out the demo: https://vimeo.com/183702998
 
 Or check out the application: https://discute.herokuapp.com
+
+## Build & development
+
+Run `npm install` to install all the dependencies.
+Run `grunt` to run the project.
 
