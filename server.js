@@ -81,8 +81,7 @@ app.listen(app.get('port'), function(){
 
 // Connect to db
 mongoose.Promise = global.Promise;
-// mongoose.connect(config.database);
-mongoose.connect(process.env.MONGOLAB_URI);
+mongoose.connect(process.env.MONGOLAB_URI || config.database);
 
 
 // Passport strategy
