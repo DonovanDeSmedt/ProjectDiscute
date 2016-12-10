@@ -8,6 +8,21 @@
 .navbar-default{
 	background-color: #ffffff;
 }
+.login-background{
+	left: 0px;
+	top: 0px;
+ 	overflow: hidden;
+	margin: 0px; 
+    padding: 0px; 
+    z-index: -999999; 
+    height: 100%;
+    width: 100%;
+    position: fixed;
+	background-color: red;
+	background-image: url('../images/ny-sf2.jpg');
+	background-size: cover;
+}
+
 
 @font-face {
 	font-family: exothin;

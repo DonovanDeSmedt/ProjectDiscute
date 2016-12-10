@@ -4,14 +4,6 @@
 	angular.module('discuteApp.global', [])
 	.controller('GlobalController', ['$scope', '$rootScope', '$cookies', '$http', '$state', '$location', '$timeout', 'AuthenticationService', globalCtrl]);
 	function globalCtrl($scope,$rootScope,$cookies,$http,$state,$location, $timeout, AuthenticationService){
-		if(window.innerWidth > 769){
-			$(".login-background img").width(window.innerWidth);
-			$(".login-background img").height(window.innerWidth/1.5);
-		}
-		else{
-			$(".login-background img").width(window.innerHeight*1.5);
-			$(".login-background img").height(window.innerHeight);
-		}
 		$rootScope.rootImgUrl = 'http://res.cloudinary.com/dvf32xjxh/image/upload/v1480612233/'; 
 		$scope.logout = function(){
 			AuthenticationService.Logout();
