@@ -21,12 +21,12 @@
 			if(side === 'left'){
 				$timeout(function(){
 					$("#upload-image-left").click();
-				})
+				});
 			}
 			else if(side === 'right'){
 				$timeout(function(){
 					$("#upload-image-right").click();
-				})
+				});
 			}
 		}
 		$scope.$watch('discute.description', function (newValue, oldValue) {

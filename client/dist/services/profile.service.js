@@ -16,8 +16,8 @@
 		function getUser(username) {
 			return $http.get('/user/' + username);
 		}
-		function updateAccount(username, oldUser, newUser) {
-			return $http.put('/user/account/' + username, { old: oldUser, new: newUser });
+		function updateAccount(oldEmail, newEmail) {
+			return $http.put('/user/account/' + oldEmail, {new: newEmail});
 		}
 		function updatePassword(currentPassword, newPassword, email) {
 			return $http.put('/user/changePassword/', { currentPassword: currentPassword, password: newPassword, email: email });

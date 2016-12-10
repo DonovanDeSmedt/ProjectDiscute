@@ -268,7 +268,7 @@ router.get('/tag/:name/:index', function(req, res, next){
 			res.json({discutes: prepareDataToBeSend(data)});
 		}
 		else{
-			res.send(500, {message: "Something went wrong with orderBy"})
+			res.status(500).send({message: "Something went wrong with orderBy"});
 		}
 	});
 });

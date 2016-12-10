@@ -161,13 +161,13 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
 
   this.setHeaderName = function(n) {
     headerName = n;
-  }
+  };
   this.setCookieName = function(n) {
     cookieName = n;
-  }
+  };
   this.setAllowedMethods = function(n) {
     allowedMethods = n;
-  }
+  };
   this.$get = ['$cookies', function($cookies){
     return {
       'request': function(config) {
@@ -177,13 +177,12 @@ angular.module('discuteApp').config(function($stateProvider,$httpProvider, $urlR
         }
         return config;
       }
-    }
+    };
   }];
 }]);
 
 const checkLoggedIn = function($q, $timeout, $cookies,$http, $location, $rootScope, $state, AuthenticationService){
   const deferred = $q.defer();
-  const obj = $cookies.getObject('currentUser');
   $rootScope.prevURL = $location.path();
   if($cookies.getObject('currentUser')!= null){
     deferred.resolve();
@@ -210,7 +209,7 @@ const checkUser = function($q, $stateParams, $rootScope){
     deferred.resolve();
   }
   return deferred.promise;
-}
+};
 const splitArray = function(discutes){
   let prevIndex = 0;
   let nextIndex = 3;
@@ -225,5 +224,5 @@ const splitArray = function(discutes){
     newArray.push(discutes.slice(discutes.length-rest, discutes.length-1));
   }
   return newArray;
-}
+};
 

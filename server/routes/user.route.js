@@ -121,9 +121,9 @@ router.put('/profile_picture/:username', function(req, res, next){
 	});
 
 	var stream = cloudinary.uploader.upload_stream(function(result) {
-    	console.log(result);
-  		res.send("Succes");
-  	}.bind(this), { public_id: fileName } );
+		console.log(result);
+		res.send("Succes");
+	}.bind(this), { public_id: fileName } );
 
 
 	var writeStreamDB = gfs.createWriteStream({
@@ -181,59 +181,28 @@ router.put('/changePassword/', function(req, res, next){
 	})
 })
 /**
-*@api {put} /user/account/:username Change username
-*@apiName ChangeUsername
+*@api {put} /user/account/:email Change email
+*@apiName ChangeEmail
 *@apiGroup Authentication
-*@apiParam {String} Email Email
-*@apiParam {Object} CurrentUser User object which contains username and email
-*@apiParam {Object} NewUser User object which contains username and email
+*@apiParam {String} Email Current email
+*@apiParam {String} Email New email
 *@apiError NoAccessRight User is not authenticated
 *@apiError UsernotFound The <code>id</code> of user was not found.
 */
-router.put('/account/:username', function(req, res, next){
-	var oldUser = req.body.old;
-	var newUser = req.body.new;
-	User.findOne({$or: [{username: oldUser.username},{email: oldUser.email}]},function(err, user){
-		if(oldUser.email !== newUser.email){
-			user.email = newUser.email;
+router.put('/account/:email', function(req, res, next){
+	var oldEmail = req.params.email;
+	var newEmail = req.body.new;
+	User.findOne({email: oldEmail},function(err, user){
+		if(oldEmail !== newEmail){
+			user.email = newEmail;
 		}
-		else{
-			newUser.email = "";
-		}
-		if(oldUser.username !== newUser.username){
-			user.username = newUser.username;
-		}
-		else{
-			newUser.username = "";
-		}
-
-		user.checkUniqueUpdate(newUser.username,newUser.email, function(data){
-			if(data.success){
-				if(newUser.username !== ""){
-					Discute.find({author: oldUser.username}, function(err, discutes){
-						discutes.forEach(function(discute, index){
-							discute.author = newUser.username;
-							discute.save(function(err){
-								if(err){
-									console.log(err.message, discute);
-									return next(err);
-								}
-							})
-						});
-					});
-				}
-				user.save(function(err){
-					if(err){
-						console.log(err);
-						return next(err);
-					}
-					else{
-						res.sendStatus(200);
-					}
-				})
+		user.save(function(err){
+			if(err){
+				console.log(err);
+				return next(err);
 			}
 			else{
-				next(new Error(data.err.message));
+				res.sendStatus(200);
 			}
 		});
 	});

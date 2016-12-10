@@ -22,7 +22,7 @@
 				else{
 					$scope.errorMessage = "Email or password incorrect";
 				}
-			})
-		}
-	};
+			});
+		};
+	}
 })();

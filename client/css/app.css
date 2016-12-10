@@ -442,6 +442,9 @@ input{
 	box-shadow: none;
 
 }
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+	background-color: transparent;
+}
 .line-box{
 	padding: 0 1em;
 }

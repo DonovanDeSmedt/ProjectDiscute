@@ -103,7 +103,7 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('default', ['nodemon:dev', 'watch', 'jshint']);
+    grunt.registerTask('default', ['nodemon:dev', 'watch']);
     grunt.registerTask('min', ['babel','concat','uglify', 'cssmin', 'nodemon:dev']);
 };
 

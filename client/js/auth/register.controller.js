@@ -16,7 +16,7 @@
 						if(loginResult){
 							$state.go('home');
 						}
-					})
+					});
 				}
 				else{
 					if(data === "email"){
@@ -32,7 +32,7 @@
 						$('#username').addClass('invalid');
 					}
 				}});
-		}
+		};
 		var removeWhiteSpace = function(word) {
 			word.trim();
 			var index = word.indexOf(' ');
@@ -40,6 +40,6 @@
 				word = word.replace(/ /g, '');
 			}
 			return  word;
-		}
-	};
+		};
+	}
 })();
