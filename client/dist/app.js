@@ -171,7 +171,6 @@ angular.module('discuteApp').config(function ($stateProvider, $httpProvider, $ur
 
 var checkLoggedIn = function checkLoggedIn($q, $timeout, $cookies, $http, $location, $rootScope, $state, AuthenticationService) {
   var deferred = $q.defer();
-  var obj = $cookies.getObject('currentUser');
   $rootScope.prevURL = $location.path();
   if ($cookies.getObject('currentUser') != null) {
     deferred.resolve();

@@ -52,15 +52,7 @@
 		});
 		$rootScope.updateCurrentUser();
 		function editProfileForm(user) {
-			var oldUser = {
-				email: $rootScope.currentUser.email.toLowerCase(),
-				username: $rootScope.currentUser.username.toLowerCase()
-			};
-			var newUser = {
-				email: user.email.toLowerCase(),
-				username: user.username.toLowerCase()
-			};
-			update_account(oldUser, newUser);
+			update_account($rootScope.currentUser.email.toLowerCase(), user.email.toLowerCase());
 		}
 		function changePasswordForm(user) {
 			update_password(user);
@@ -146,15 +138,14 @@
 				});
 			}
 		}
-		function update_account(oldUser, newUser) {
-			ProfileService.updateAccount($rootScope.currentUser.username, oldUser, newUser).then(function (data) {
-				console.log("Successfuly updated useraccount");
-				$rootScope.currentUser.username = newUser.username;
-				$rootScope.currentUser.email = newUser.email;
-				var currentUser = $cookies.getObject('currentUser');
-				currentUser.email = newUser.email;
-				currentUser.username = newUser.username;
-				$cookies.putObject('currentUser', currentUser);
+		function update_account(oldEmail, newEmail) {
+			ProfileService.updateAccount(oldEmail, newEmail).then(function (data) {
+				bootbox.alert("Successfuly updated email", function (result) {
+					$rootScope.currentUser.email = newEmail;
+					var currentUser = $cookies.getObject('currentUser');
+					currentUser.email = newEmail;
+					$cookies.putObject('currentUser', currentUser);
+				});
 			}).catch(function (err) {
 				if (err.data === "email") {
 					self.emailError = true;

@@ -171,7 +171,6 @@ angular.module('discuteApp').config(function ($stateProvider, $httpProvider, $ur
 
 var checkLoggedIn = function checkLoggedIn($q, $timeout, $cookies, $http, $location, $rootScope, $state, AuthenticationService) {
   var deferred = $q.defer();
-  var obj = $cookies.getObject('currentUser');
   $rootScope.prevURL = $location.path();
   if ($cookies.getObject('currentUser') != null) {
     deferred.resolve();
@@ -239,7 +238,7 @@ var splitArray = function splitArray(discutes) {
 				}
 			});
 		};
-	};
+	}
 })();
 ;'use strict';
 
@@ -285,7 +284,7 @@ var splitArray = function splitArray(discutes) {
 			}
 			return word;
 		};
-	};
+	}
 })();
 ;'use strict';
 
@@ -777,15 +776,7 @@ angular.module('discuteApp.directive', []).directive('passwordValidator', functi
 		});
 		$rootScope.updateCurrentUser();
 		function editProfileForm(user) {
-			var oldUser = {
-				email: $rootScope.currentUser.email.toLowerCase(),
-				username: $rootScope.currentUser.username.toLowerCase()
-			};
-			var newUser = {
-				email: user.email.toLowerCase(),
-				username: user.username.toLowerCase()
-			};
-			update_account(oldUser, newUser);
+			update_account($rootScope.currentUser.email.toLowerCase(), user.email.toLowerCase());
 		}
 		function changePasswordForm(user) {
 			update_password(user);
@@ -871,15 +862,14 @@ angular.module('discuteApp.directive', []).directive('passwordValidator', functi
 				});
 			}
 		}
-		function update_account(oldUser, newUser) {
-			ProfileService.updateAccount($rootScope.currentUser.username, oldUser, newUser).then(function (data) {
-				console.log("Successfuly updated useraccount");
-				$rootScope.currentUser.username = newUser.username;
-				$rootScope.currentUser.email = newUser.email;
-				var currentUser = $cookies.getObject('currentUser');
-				currentUser.email = newUser.email;
-				currentUser.username = newUser.username;
-				$cookies.putObject('currentUser', currentUser);
+		function update_account(oldEmail, newEmail) {
+			ProfileService.updateAccount(oldEmail, newEmail).then(function (data) {
+				bootbox.alert("Successfuly updated email", function (result) {
+					$rootScope.currentUser.email = newEmail;
+					var currentUser = $cookies.getObject('currentUser');
+					currentUser.email = newEmail;
+					$cookies.putObject('currentUser', currentUser);
+				});
 			}).catch(function (err) {
 				if (err.data === "email") {
 					self.emailError = true;
@@ -1240,8 +1230,8 @@ angular.module('discuteApp.service').factory('_', function ($window) {
 		function getUser(username) {
 			return $http.get('/user/' + username);
 		}
-		function updateAccount(username, oldUser, newUser) {
-			return $http.put('/user/account/' + username, { old: oldUser, new: newUser });
+		function updateAccount(oldEmail, newEmail) {
+			return $http.put('/user/account/' + oldEmail, { new: newEmail });
 		}
 		function updatePassword(currentPassword, newPassword, email) {
 			return $http.put('/user/changePassword/', { currentPassword: currentPassword, password: newPassword, email: email });
