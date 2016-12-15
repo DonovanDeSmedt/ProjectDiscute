@@ -74,8 +74,8 @@ router.post('/new', function(req, res, next){
 		console.log('Image height is ' + info.height);
 	});
 
-	let min = imagemin({ext:'jpg'});
-
+	let minLeft = imagemin({ext:'jpg'});
+	let minRight = imagemin({ext:'jpg'});
 
 
 
@@ -95,8 +95,8 @@ router.post('/new', function(req, res, next){
 
 
 
-	readStreamLocalLeft.pipe(min).pipe(transformer).pipe(streamLeft);
-	readStreamLocalRight.pipe(min).pipe(transformer1).pipe(streamRight);
+	readStreamLocalLeft.pipe(minLeft).pipe(transformer).pipe(streamLeft);
+	readStreamLocalRight.pipe(minRight).pipe(transformer1).pipe(streamRight);
 
 	let discute = new Discute();
 	discute.author = req.body.author;
