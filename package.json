@@ -34,6 +34,7 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-nodemon": "^0.4.2",
+    "image-min": "^0.3.2",
     "jsonwebtoken": "^7.0.1",
     "lodash": "^4.13.1",
     "method-override": "^2.3.7",

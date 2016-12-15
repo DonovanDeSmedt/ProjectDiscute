@@ -21,7 +21,7 @@
             <div class="user-content">
               <div class="item-block">
                 <div ng-repeat="comment in currentDiscute.left.comments track by $index" class="comment">
-                  <p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="profileCtrl.deleteComment('left',comment, $index, currentDiscute)">
+                  <p class="comment-text"><a ui-sref="user({username: comment.name})" ng-click="profileCtrl.closeModal()"class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="profileCtrl.deleteComment('left',comment, $index, currentDiscute)">
                 </div>
               </div>
             </div>
@@ -68,7 +68,7 @@
             <div class="user-content">
               <div class="item-block">
                 <div ng-repeat="comment in currentDiscute.right.comments track by $index" class="comment">
-                  <p class="comment-text"><a ui-sref="user({username: comment.name})" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="profileCtrl.deleteComment('right',comment, $index, currentDiscute)">
+                  <p class="comment-text"><a ui-sref="user({username: comment.name})" ng-click="profileCtrl.closeModal()" class="comment-author">{{comment.name}}</a>{{comment.comment}}</p><img ng-src="images/x.png" class="pull-right delete-cross" alt="" ng-show="comment.name === currentUser.username" ng-click="profileCtrl.deleteComment('right',comment, $index, currentDiscute)">
                 </div>
               </div>
             </div>

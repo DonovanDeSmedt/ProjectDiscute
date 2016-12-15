@@ -4,7 +4,7 @@
 	angular.module('discuteApp.global', [])
 	.controller('GlobalController', ['$scope', '$rootScope', '$cookies', '$http', '$state', '$location', '$timeout', 'AuthenticationService', globalCtrl]);
 	function globalCtrl($scope,$rootScope,$cookies,$http,$state,$location, $timeout, AuthenticationService){
-		$rootScope.rootImgUrl = 'http://res.cloudinary.com/dvf32xjxh/image/upload/v1480612233/'; 
+		$rootScope.rootImgUrl = 'http://res.cloudinary.com/dvf32xjxh/image/upload/c_scale,h_400,q_75/v1480612233/'; 
 		$scope.logout = function(){
 			AuthenticationService.Logout();
 			$state.go('login');

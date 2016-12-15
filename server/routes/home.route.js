@@ -1,29 +1,29 @@
-var express = require('express');
-var router = express.Router();
-var multer = require('multer');
-var mongoose = require('mongoose');
+let express = require('express');
+let router = express.Router();
+let multer = require('multer');
+let mongoose = require('mongoose');
 
-var Grid = require('gridfs-stream');
-var fs = require('fs');
-var conn = mongoose.connection;
+let Grid = require('gridfs-stream');
+let fs = require('fs');
+let conn = mongoose.connection;
 Grid.mongo = mongoose.mongo;
 
-var sharp = require('sharp');
-var cloudinary = require('cloudinary');
+let sharp = require('sharp');
+let cloudinary = require('cloudinary');
+
+let imagemin = require('image-min');
+let path = require('path');
+let appDir = path.dirname(require.main.filename);
+
+let User = require(appDir+'/server/models/user.js');
+let Discute = require(appDir+'/server/models/discute.js');
 
 
-var path = require('path');
-var appDir = path.dirname(require.main.filename);
-
-var User = require(appDir+'/server/models/user.js');
-var Discute = require(appDir+'/server/models/discute.js');
-
-
-var gfs = Grid(conn.db);
+let gfs = Grid(conn.db);
 
 
 router.param('discute_id', function(req, res, next, id){
-	var query = Discute.findById(id);
+	let query = Discute.findById(id);
 	query.exec(function (err, discute) {
 		if (err) { return next(err); }
 		if (!discute) { return next(new Error("Can't find discute")); }
@@ -36,56 +36,57 @@ router.param('discute_id', function(req, res, next, id){
 *@api {post} /discute/new/ Post new discute object
 *@apiName PostDiscute
 *@apiGroup Discute
-*@apiParam {String} filenameLeft Name discute left.
-*@apiParam {String} filenameRight Name discute right.
-*@apiParam {String} fileExtensionLeft Extension image left.
-*@apiParam {String} fileExtensionRight Extension image right.
-*@apiParam {String} pathImageLeft Path image left.
-*@apiParam {String} pathImageRight Path image right.
-*@apiError NoAccessRight User is not authenticated
+*@apiParam {String} Author Name of author.
+*@apiParam {Object} Pictures Array of blob objects.
+*@apiError NoAccessRight User is not authenticated.
+*@apiError ParseError Object type not supported.
 */
 router.post('/new', function(req, res, next){
-	var fileNameLeft = req.body.author +  new Date().getTime();
-	var fileNameRight = req.body.author +  (new Date().getTime() + 1);
-	var fileExtensionLeft = req.files[0].mimetype;
-	var fileExtensionRight = req.files[1].mimetype;
-	var pathReadLeft = appDir+'/'+req.files[0].path;
-	var pathReadRight = appDir+'/'+req.files[1].path;
-	var result = 0;
+	let fileNameLeft = req.body.author +  new Date().getTime();
+	let fileNameRight = req.body.author +  (new Date().getTime() + 1);
+	let fileExtensionLeft = req.files[0].mimetype;
+	let fileExtensionRight = req.files[1].mimetype;
+	let pathReadLeft = appDir+'/'+req.files[0].path;
+	let pathReadRight = appDir+'/'+req.files[1].path;
+	let result = 0;
 
-	var url = {};
+	let url = {};
 	// Local streams 
-	var readStreamLocalLeft = fs.createReadStream(pathReadLeft);
-	var readStreamLocalRight = fs.createReadStream(pathReadRight);
+	let readStreamLocalLeft = fs.createReadStream(pathReadLeft);
+	let readStreamLocalRight = fs.createReadStream(pathReadRight);
 
 	// DB streams
-	var writeStreamDBLeft = gfs.createWriteStream({
+	let writeStreamDBLeft = gfs.createWriteStream({
 		filename: fileNameLeft
 	});
-	var writeStreamDBRight = gfs.createWriteStream({
+	let writeStreamDBRight = gfs.createWriteStream({
 		filename: fileNameRight
 	});
-	var transformer = sharp()
-	.resize(400)
-	.on('info', function(info) {
-		console.log('Image height is ' + info.height);
-	});
-	var transformer1 = sharp()
+	let transformer = sharp()
 	.resize(400)
 	.on('info', function(info) {
 		console.log('Image height is ' + info.height);
 	});
 
+	let transformer1 = sharp()
+	.resize(400)
+	.on('info', function(info) {
+		console.log('Image height is ' + info.height);
+	});
+
+	let min = imagemin({ext:'jpg'});
 
 
-	var streamLeft = cloudinary.uploader.upload_stream(function(data) {
+
+
+	let streamLeft = cloudinary.uploader.upload_stream(function(data) {
   		result++;
 		if(result === 3){
 			res.send("Succes");
 		}
   	}.bind(this), { public_id: fileNameLeft } );
 
-  	var streamRight = cloudinary.uploader.upload_stream(function(data) {
+  	let streamRight = cloudinary.uploader.upload_stream(function(data) {
   		result++;
 		if(result === 3){
 			res.send("Succes");
@@ -94,10 +95,10 @@ router.post('/new', function(req, res, next){
 
 
 
-	readStreamLocalLeft.pipe(streamLeft);
-	readStreamLocalRight.pipe(streamRight);
+	readStreamLocalLeft.pipe(min).pipe(transformer).pipe(streamLeft);
+	readStreamLocalRight.pipe(min).pipe(transformer1).pipe(streamRight);
 
-	var discute = new Discute();
+	let discute = new Discute();
 	discute.author = req.body.author;
 	discute.left.picture.fileName = fileNameLeft;
 	discute.right.picture.fileName = fileNameRight;
@@ -127,14 +128,14 @@ router.post('/new', function(req, res, next){
 *@apiName GetDiscute
 *@apiGroup Discute
 *@apiParam {String} Username Name of user
-*@apiParam {Number} Pagenumber Pagenumber
+*@apiParam {Number} Index Pagenumber
 *@apiDescription Get latest discutes of your subscribtions per page.
 *@apiSuccess {Object[]} Discutes List of discute objects.
 *@apiError NoAccessRight User is not authenticated
 *@apiError UserNotFound The <code>id</code> of the User was not found.
 */
 router.get('/:username/:index', function(req, res, next){
-	var amountToSkip = req.params.index * 12;
+	let amountToSkip = req.params.index * 12;
 	User.findOne({username: req.params.username}, function(err, user){
 		if(err){
 			console.log("Error while fetching data");
@@ -162,9 +163,9 @@ router.get('/:username/:index', function(req, res, next){
 *@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
 */
 router.delete('/:discute_id', function(req, res, next){	
-		var discute = req.discute;
-		var picLeft = discute.left.picture.fileName;
-		var picRight = discute.right.picture.fileName;
+		let discute = req.discute;
+		let picLeft = discute.left.picture.fileName;
+		let picRight = discute.right.picture.fileName;
 
 		cloudinary.uploader.destroy(picLeft, function(result) { console.log(result) });
 		cloudinary.uploader.destroy(picRight, function(result) { console.log(result) });
@@ -193,13 +194,13 @@ router.get('/findBy/id/:discute_id', function(req, res){
 *@apiName GetTrendingDiscutes
 *@apiGroup Discute
 *@apiDescription Get latest discutes per page.
-*@apiParam {Number} Pagenumber Pagenumber
+*@apiParam {Number} Index Pagenumber
 *@apiSuccess {Object[]} Discutes List of discute objects.
 *@apiError NoAccessRight User is not authenticated
 *@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
 */
 router.get('/:index', function(req, res, next){
-	var amountToSkip = req.params.index * 21;
+	let amountToSkip = req.params.index * 21;
 	Discute.find().sort({date: -1}).skip(amountToSkip).limit(21).exec(function(err, data){
 		if(err){
 			console.log("Error while fetching data");
@@ -216,7 +217,7 @@ router.get('/:index', function(req, res, next){
 *@apiGroup Discute
 *@apiParam {String} Username Name of the user who has voted
 *@apiParam {Number} Id Id of discute
-*@apiSuccess Data Votes and comments of both sides of the discute object
+*@apiSuccess {Object} Data Votes and comments of both sides of the discute object
 *@apiError NoAccessRight User is not authenticated
 *@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
 */
@@ -230,14 +231,14 @@ router.put('/vote/:discute_id', function(req, res, next){
 	})
 });
 /**
-*@api {put} /discute/commentdiscute/:discute_id Comment discute
+*@api {put} /discute/comment/:discute_id Comment discute
 *@apiName Comment
 *@apiGroup Discute
 *@apiParam {String} Username Name of the user who has commented
 *@apiParam {String} Side Side of discute object(left/right)
 *@apiParam {String} Comment Comment
 *@apiParam {Number} Id Id of discute
-*@apiSuccess Votes Comments of both sides
+*@apiSuccess {Object} Data Votes and comments of both sides of the discute object
 *@apiError NoAccessRight User is not authenticated
 *@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
 */
@@ -257,7 +258,7 @@ router.put('/comment/:discute_id', function(req, res, next){
 *@apiParam {String} Side Side of discute object(left/right)
 *@apiParam {Number} Id Id of discute
 *@apiParam {Number} Id Id of comment
-*@apiSuccess Votes Comments of both sides
+*@apiSuccess {Object} Data Votes and comments of both sides of the discute object
 *@apiError NoAccessRight User is not authenticated
 *@apiError DiscuteNotFound The <code>id</code> of the discute was not found.
 */
@@ -272,7 +273,7 @@ router.put('/uncomment/:discute_id', function(req, res, next){
 	
 });
 function prepareDataToBeSend(data){
-	var discute = [];
+	let discute = [];
 	data.forEach(function(value, index){
 		discute[index] = {};
 		discute[index].right = {};

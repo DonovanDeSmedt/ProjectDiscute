@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var fs = require('fs');
-var sharp = require('sharp');
+let express = require('express');
+let router = express.Router();
+let mongoose = require('mongoose');
+let fs = require('fs');
+let sharp = require('sharp');
 
-var path = require('path');
-var appDir = path.dirname(require.main.filename);
+let path = require('path');
+let appDir = path.dirname(require.main.filename);
 
-var User = require(appDir+'/server/models/user.js');
+let User = require(appDir+'/server/models/user.js');
 
 
 // Register
@@ -25,7 +25,7 @@ router.get('/', function(req, res){
 *@apiError UserAlreadyExists The user with <code>email</code> or <code>username</code> already exists.
 */
 router.post('/', function(req, res, next){
-	var user = new User();
+	let user = new User();
 		user.email = req.body.email;
 		user.username = req.body.username;
 		user.password = req.body.password;

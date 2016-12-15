@@ -1,26 +1,26 @@
-var express = require('express');
-var router = express.Router();
-var multer = require('multer');
-var mongoose = require('mongoose');
+let express = require('express');
+let router = express.Router();
+let multer = require('multer');
+let mongoose = require('mongoose');
 
-var Grid = require('gridfs-stream');
-var fs = require('fs');
-var conn = mongoose.connection;
+let Grid = require('gridfs-stream');
+let fs = require('fs');
+let conn = mongoose.connection;
 Grid.mongo = mongoose.mongo;
 
 
 
-var path = require('path');
-var appDir = path.dirname(require.main.filename);
+let path = require('path');
+let appDir = path.dirname(require.main.filename);
 
-var User = require(appDir+'/server/models/user.js');
-var Discute = require(appDir+'/server/models/discute.js');
+let User = require(appDir+'/server/models/user.js');
+let Discute = require(appDir+'/server/models/discute.js');
 
 
 
 
 router.param('discute_id', function(req, res, next, id){
-	var query = Discute.findById(id);
+	let query = Discute.findById(id);
 	query.exec(function (err, discute) {
 		if (err) { return next(err); }
 		if (!discute) { return next(new Error("Can't find discute")); }
@@ -35,14 +35,14 @@ router.param('discute_id', function(req, res, next, id){
 *@apiDescription Get ordered list of discutes per page  
 *@apiName GetOrderedTrendingDiscutes
 *@apiGroup Discute
-*@apiParam {Number} Pagenumber Pagenumber
-*@apiParam {String} Order Type order
+*@apiParam {Number} Index Pagenumber
+*@apiParam {String} Sort Order type (week/month/year/always)
 *@apiSuccess {Object[]} Discutes List of discute objects.
 *@apiError NoAccessRight User is not authenticated
 */
 router.get('/orderBy/:sort/:index', function(req, res, next){
-	var amountToSkip = req.params.index * 21;
-	var date = new Date();
+	let amountToSkip = req.params.index * 21;
+	let date = new Date();
 	switch(req.params.sort.toLowerCase()){
 		case 'week': date = new Date(date.setDate(date.getDate() - 7)); break;
 		case 'month': date = new Date(date.setMonth(date.getMonth() - 1)); break;
@@ -119,22 +119,22 @@ router.get('/orderBy/:sort/:index', function(req, res, next){
 *@apiDescription Get ordered list of discutes by search per page
 *@apiName GetDiscutesBySearchAndOrder
 *@apiGroup Discute
-*@apiParam {String} Searchterm Searchterm
-*@apiParam {String} Order Type order
-*@apiParam {Number} Pagenumber Pagenumber
+*@apiParam {String} Search Searchterm
+*@apiParam {String} Sort Order type (week/month/year/always)
+*@apiParam {Number} Index Pagenumber
 *@apiSuccess {Object[]} Discutes List of discute objects.
 *@apiError NoAccessRight User is not authenticated
 */
 router.get('/searchAndOrder/:search/:sort/:index', function(req, res, next){
-	var date = new Date();
-	var amountToSkip = req.params.index * 21;
+	let date = new Date();
+	let amountToSkip = req.params.index * 21;
 	switch(req.params.sort.toLowerCase()){
 		case 'week': date = new Date(date.setDate(date.getDate() - 7)); break;
 		case 'month': date = new Date(date.setMonth(date.getMonth() - 1)); break;
 		case 'year': date = new Date(date.setYear(date.getYear() - 1)); break;
 		case 'always': date = new Date(date.setYear(date.getYear() - 100)); break;
 	}
-	var name = req.params.search;
+	let name = req.params.search;
 	Discute.aggregate(
 		[       
 		{
@@ -218,14 +218,14 @@ router.get('/searchAndOrder/:search/:sort/:index', function(req, res, next){
 *@apiDescription Get list of discutes by search
 *@apiName GetDiscutesBySearch
 *@apiGroup Discute
-*@apiParam {String} Searchterm Searchterm
-*@apiParam {Number} Pagenumber Pagenumber
+*@apiParam {String} Name Searchterm
+*@apiParam {Number} Index Pagenumber
 *@apiSuccess {Object[]} Discutes List of discute objects.
 *@apiError NoAccessRight User is not authenticated
 */
 router.get('/:name/:index', function(req, res, next){
-	var amountToSkip = req.params.index * 21;
-	var name = req.params.name;
+	let amountToSkip = req.params.index * 21;
+	let name = req.params.name;
 	Discute.find(
 		{$or: 
 			[
@@ -252,13 +252,13 @@ router.get('/:name/:index', function(req, res, next){
 *@apiDescription Get list of discutes by tag per page
 *@apiName GetDiscutesByTag
 *@apiGroup Discute
-*@apiParam {String} Tag Tag
-*@apiParam {Number} Pagenumber Pagenumber
+*@apiParam {String} Name Tag
+*@apiParam {Number} Index Pagenumber
 *@apiSuccess {Object[]} Discutes List of discute objects.
 *@apiError NoAccessRight User is not authenticated
 */
 router.get('/tag/:name/:index', function(req, res, next){
-	var amountToSkip = req.params.index * 21;
+	let amountToSkip = req.params.index * 21;
 	Discute.find({ $text: { $search: req.params.name }}).sort({date: -1}).skip(amountToSkip).limit(21).exec(function(err, data){
 		if(err){
 			console.log("Error while fetching data from orderBy");
@@ -278,21 +278,21 @@ router.get('/tag/:name/:index', function(req, res, next){
 *@apiName GetDiscutesByTagAndOrder
 *@apiGroup Discute
 *@apiParam {String} Tag Tag
-*@apiParam {String} Order Type order
-*@apiParam {Number} Pagenumber Pagenumber
+*@apiParam {String} Sort Order type (week/month/year/always)
+*@apiParam {Number} Index Pagenumber
 *@apiSuccess {Object[]} Discutes List of discute objects.
 *@apiError NoAccessRight User is not authenticated
 */
 router.get('/tagAndOrder/:tag/:sort/:index', function(req, res, next){
-	var amountToSkip = req.params.index * 21;
-	var date = new Date();
+	let amountToSkip = req.params.index * 21;
+	let date = new Date();
 	switch(req.params.sort.toLowerCase()){
 		case 'week': date = new Date(date.setDate(date.getDate() - 7)); break;
 		case 'month': date = new Date(date.setMonth(date.getMonth() - 1)); break;
 		case 'year': date = new Date(date.setYear(date.getYear() - 1)); break;
 		case 'always': date = new Date(date.setYear(date.getYear() - 100)); break;
 	}
-	var name = req.params.tag;
+	let name = req.params.tag;
 	Discute.aggregate(
 		[       
 		{
@@ -369,7 +369,7 @@ router.get('/tagAndOrder/:tag/:sort/:index', function(req, res, next){
 
 
 function prepareDataToBeSend(data){
-	var discute = [];
+	let discute = [];
 	data.forEach(function(value, index){
 		discute[index] = {};
 		discute[index].right = {};

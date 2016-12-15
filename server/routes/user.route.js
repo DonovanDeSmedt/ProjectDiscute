@@ -1,20 +1,20 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var Grid = require('gridfs-stream');
-var fs = require('fs');
-var conn = mongoose.connection;
+let express = require('express');
+let router = express.Router();
+let mongoose = require('mongoose');
+let Grid = require('gridfs-stream');
+let fs = require('fs');
+let conn = mongoose.connection;
 Grid.mongo = mongoose.mongo;
-var sharp = require('sharp');
-var cloudinary = require('cloudinary');
+let sharp = require('sharp');
+let cloudinary = require('cloudinary');
 
 
-var path = require('path');
-var appDir = path.dirname(require.main.filename);
+let path = require('path');
+let appDir = path.dirname(require.main.filename);
 
-var User = require(appDir+'/server/models/user.js');
-var Discute = require(appDir+'/server/models/discute.js');
-var gfs = Grid(conn.db);
+let User = require(appDir+'/server/models/user.js');
+let Discute = require(appDir+'/server/models/discute.js');
+let gfs = Grid(conn.db);
 
 /**
 *@api {get} /user/:username Get data of user
@@ -26,7 +26,7 @@ var gfs = Grid(conn.db);
 *@apiError NoAccessRight User is not authenticated
 */
 router.get('/:username', function(req, res, next){
-	var findUser = User.findOne({username: req.params.username}, function(err, user){
+	let findUser = User.findOne({username: req.params.username}, function(err, user){
 		if(err){
 			next(err);
 		}
@@ -73,7 +73,7 @@ router.put('/follow/:username', function(req, res, next){
 				else{
 					User.findOne({username: req.body.userToFollow}, function(err, followingUser){
 						if(followingUser){
-							var index = followingUser.followers.indexOf(req.body.follower);
+							let index = followingUser.followers.indexOf(req.body.follower);
 							if(index >= 0){
 								followingUser.followers.splice(index, 1);
 							}
@@ -111,22 +111,22 @@ router.put('/follow/:username', function(req, res, next){
 *@apiError UsernotFound The <code>id</code> of user was not found.
 */
 router.put('/profile_picture/:username', function(req, res, next){
-	var path = appDir+'/'+req.files[0].path;
-	var fileName = req.params.username+'.profile';
-	var readStream = fs.createReadStream(path);
-	var transformer = sharp()
+	let path = appDir+'/'+req.files[0].path;
+	let fileName = req.params.username+'.profile';
+	let readStream = fs.createReadStream(path);
+	let transformer = sharp()
 	.resize(100)
 	.on('info', function(info) {
 		console.log('Image height is ' + info.height);
 	});
 
-	var stream = cloudinary.uploader.upload_stream(function(result) {
+	let stream = cloudinary.uploader.upload_stream(function(result) {
 		console.log(result);
 		res.send("Succes");
 	}.bind(this), { public_id: fileName } );
 
 
-	var writeStreamDB = gfs.createWriteStream({
+	let writeStreamDB = gfs.createWriteStream({
 		filename: fileName
 	});
 
@@ -190,8 +190,8 @@ router.put('/changePassword/', function(req, res, next){
 *@apiError UsernotFound The <code>id</code> of user was not found.
 */
 router.put('/account/:email', function(req, res, next){
-	var oldEmail = req.params.email;
-	var newEmail = req.body.new;
+	let oldEmail = req.params.email;
+	let newEmail = req.body.new;
 	User.findOne({email: oldEmail},function(err, user){
 		if(oldEmail !== newEmail){
 			user.email = newEmail;
@@ -208,7 +208,7 @@ router.put('/account/:email', function(req, res, next){
 	});
 });
 function prepareDataToBeSend(data){
-	var discute = [];
+	let discute = [];
 	data.forEach(function(value, index){
 		discute[index] = {};
 		discute[index].right = {};

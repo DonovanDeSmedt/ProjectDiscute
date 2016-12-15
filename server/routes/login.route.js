@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-// var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var path = require('path');
-var appDir = path.dirname(require.main.filename);
-var jwt = require('jsonwebtoken');
-var config = require('../config/main');
-var User = require(appDir+'/server/models/user.js');
+let express = require('express');
+let router = express.Router();
+let mongoose = require('mongoose');
+// let passport = require('passport');
+let LocalStrategy = require('passport-local').Strategy;
+let path = require('path');
+let appDir = path.dirname(require.main.filename);
+let jwt = require('jsonwebtoken');
+let config = require('../config/main');
+let User = require(appDir+'/server/models/user.js');
 
 
 
@@ -61,7 +61,7 @@ router.get('/', function(req, res){
 *@apiError NoAccessRight User is not authenticated
 */
 router.post('/', function(req, res, next){
-	var error = new Error("Authentication failed, user not found");
+	let error = new Error("Authentication failed, user not found");
 	error.status = 404;
 
 	User.findOne({email: req.body.username}, function(err, user){
@@ -77,8 +77,8 @@ router.post('/', function(req, res, next){
 			user.comparePassword(req.body.password, function(err, isMatch) {
 				if (isMatch && !err) {
 		      		// create the token
-		      		var obj = {username: user.username, email: user.email, password: user.password};
-		      		var token = jwt.sign(obj, config.secret, {expiresIn: 10080});
+		      		let obj = {username: user.username, email: user.email, password: user.password};
+		      		let token = jwt.sign(obj, config.secret, {expiresIn: 10080});
 		      		res.json({ success: true, token: 'JWT ' + token, username: user.username, following: user.following });
 		      	}
 		      	else {

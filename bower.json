@@ -19,7 +19,8 @@
     "jasmine-core": "jasmine#^2.5.2",
     "jasmine-jquery": "^2.1.1",
     "karma-read-json": "^1.1.0",
-    "cropper": "^2.3.4"
+    "cropper": "^2.3.4",
+    "ng-img-crop-full-extended": "ngImgCropFullExtended#^0.6.2"
   },
   "devDependencies": {
     "angular-mocks": "1.4.0"
